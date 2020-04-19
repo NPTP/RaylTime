@@ -1,0 +1,21 @@
+.vs/
+.vscode/
+x64-Debug/
+x64-Release/
+CMakeSettings.json
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+*.un~
+*.swo
+*.swp
+build/*
+*.DS_Store
