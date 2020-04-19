@@ -1,4 +1,5 @@
-# RAYLTIME - realtime ray casting engine
+# RAYLTIME
+##### Simple real-time ray tracer with text-based level editor
 
 ## Ongoing to-dos for this project (This section to be removed on completion)
 - Clean up TODOs in code
@@ -119,9 +120,9 @@ Load up `rayltime`. You will see that `defaultlevel.txt` is loaded by default wh
 
 ## Libraries used
 
-- **Eigen** (Linear algebra)
+- **[Eigen](https://github.com/eigenteam/eigen-git-mirror)** (Linear algebra)
   - Math for raytracing & transformations
-- **SDL** (Simple DirectMedia Layer)
+- **[SDL](https://www.libsdl.org/)** (Simple DirectMedia Layer)
   - Window
   - Keyboard input
   - No graphics API used other than setting pixel colours based on raycast result.
