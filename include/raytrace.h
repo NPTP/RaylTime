@@ -1,3 +1,6 @@
+#ifndef RAYTRACE_H
+#define RAYTRACE_H
+
 #include "Camera.h"
 #include "Object.h"
 #include "Light.h"
@@ -17,3 +20,5 @@ void raytrace(
     const std::shared_ptr<AABBTree> &root,
     const std::vector<std::shared_ptr<Light>> &lights,
     SDL_Renderer *&renderer);
+
+#endif

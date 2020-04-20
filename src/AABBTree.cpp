@@ -1,6 +1,19 @@
 #include "AABBTree.h"
 #include "insert_box_into_box.h"
 #include <limits>
+#include "random_rgb_colour.h"
+
+// Helper for AABB tree. Sets colour of bounding box for AABB visualization.
+void set_random_aabb_colour(std::shared_ptr<Material>& vis_mat)
+{
+    std::shared_ptr<Material> new_mat(new Material());
+    new_mat->ka = random_rgb_colour();
+    new_mat->kd = Eigen::Vector3d::Zero();
+    new_mat->ks = Eigen::Vector3d::Zero();
+    new_mat->km = Eigen::Vector3d::Zero();
+    new_mat->phong_exponent = 0;
+    vis_mat = new_mat;
+}
 
 AABBTree::AABBTree(
     const std::vector<std::shared_ptr<Object> > & objects,

@@ -1,3 +1,6 @@
+#ifndef GLOBALS_H
+#define GLOBALS_H
+
 #include <stdint.h>
 // Global variables for technical settings
 
@@ -9,3 +12,5 @@ extern int G_show_boxes_depth;
 
 /* Gives the recursion depth of raytracing for reflections. */
 extern int G_raytrace_recursion_depth;
+
+#endif

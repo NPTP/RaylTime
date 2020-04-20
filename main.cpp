@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
         &window,
         &renderer);
     int rt_width, rt_height;
-    set_logical_resolution(renderer, rt_width, rt_height, '2');
+    set_logical_resolution(renderer, rt_width, rt_height, '3');
 
     SDL_Event event;
     bool quit = false;

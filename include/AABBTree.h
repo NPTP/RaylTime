@@ -7,7 +7,6 @@
 #include <memory>
 #include <vector>
 #include "ray_intersect_box.h"
-#include "rand_colour_double.h"
 
 struct AABBTree : public Object, public std::enable_shared_from_this<AABBTree>
 {
@@ -43,17 +42,5 @@ struct AABBTree : public Object, public std::enable_shared_from_this<AABBTree>
         Eigen::Vector3d &n,
         std::shared_ptr<Object> &descendant) const override;
 };
-
-// Helper for AABB tree. Sets colour of bounding box for AABB visualization.
-void set_random_aabb_colour(std::shared_ptr<Material> &vis_mat)
-{
-    std::shared_ptr<Material> new_mat(new Material());
-    new_mat->ka = Eigen::Vector3d(G_rand_colour_double(), G_rand_colour_double(), G_rand_colour_double());
-    new_mat->kd = Eigen::Vector3d(0.0, 0.0, 0.0);
-    new_mat->ks = Eigen::Vector3d(0.0, 0.0, 0.0);
-    new_mat->km = Eigen::Vector3d(0.0, 0.0, 0.0);
-    new_mat->phong_exponent = 0;
-    vis_mat = new_mat;
-}
 
 #endif

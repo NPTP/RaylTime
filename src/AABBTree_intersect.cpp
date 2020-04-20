@@ -11,8 +11,12 @@ bool AABBTree::intersect(
     Eigen::Vector3d & n,
     std::shared_ptr<Object> & descendant) const
 {
+    bool ray_intersected_box = ray_intersect_box(ray, this->box, min_t, std::numeric_limits<double>::infinity());
+    if (!ray_intersected_box)
+        return false;
+
     // Visualization of AABB Tree. Skips the rest of tree traversal logic.
-    if (G_show_boxes && this->depth == G_show_boxes_depth && ray_intersect_box(ray, this->box, min_t, std::numeric_limits<double>::infinity()))
+    if (G_show_boxes && this->depth == G_show_boxes_depth)
     {
         // TODO: clean this up with a more specific implementation
         t = 10.0;                        // Irrelevant value
@@ -23,9 +27,6 @@ bool AABBTree::intersect(
     }
 
     // Standard behaviour of tree from hereon out.
-    if (!ray_intersect_box(ray, this->box, min_t, std::numeric_limits<double>::infinity()))
-        return false;
-
     // Use these casts to test if children are AABBTrees, or if they are primitives.
     std::shared_ptr<AABBTree> left_is_aabb = std::dynamic_pointer_cast<AABBTree>(this->left);
     std::shared_ptr<AABBTree> right_is_aabb = std::dynamic_pointer_cast<AABBTree>(this->right);

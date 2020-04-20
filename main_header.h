@@ -25,16 +25,15 @@
 // Helper function forward implementations
 
 // Pixel/raycast resolution profiles 1-5
-// TODO: Allow more resolution gradations on the lower end, kill the high end
 void set_logical_resolution(SDL_Renderer*& renderer, int& w, int& h, const char& c)
 {
     switch (c)
     {
     case '1': w = 80;   h = 45;  break;
-    case '2': w = 160;  h = 90;  break;
-    case '3': w = 320;  h = 180; break;
-    case '4': w = 640;  h = 360; break;
-    case '5': w = 1280; h = 720; break;
+    case '2': w = 120;  h = 67;  break;
+    case '3': w = 160;  h = 90;  break;
+    case '4': w = 240;  h = 135; break;
+    case '5': w = 320;  h = 180; break;
     default:  w = 160;  h = 90;
     }
     SDL_RenderSetLogicalSize(renderer, w, h);

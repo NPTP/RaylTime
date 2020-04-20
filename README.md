@@ -6,7 +6,7 @@
 - Draw closer objects first, stop when you've got a colour (do we need to bring back point squared distance??). Perhaps also set a default draw distance and add ability to change view distance (use max_t values, should increase performance, make it changeable) -> then add it to readme below. Maybe make light fall off with distance so it looks like it "fogs out" into darkness instead of just cuts off.
 - Point light intensity fall-off using the t-values in blinnphong (1/t * contribution from that light source)
 - UI: show "Show bounding boxes: ON/OFF", "Bounding box tree depth: _", and "Raytrace recursion depth: _".
-- Support collision using the AABB tree (box around camera)
+- Support collision using the AABB tree (box around camera) (bring back box->intersect(box) code)
 - One of the todos is moving sdl2.dll into the build folder automatically if it's not already there. Use the existing 32/64 env check at the top of main.cpp to know which dll to use. Helpful sample code:
 ```
 // Check for and move SDL2.dll if necessary
