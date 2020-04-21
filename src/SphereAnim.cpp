@@ -3,7 +3,8 @@
 #include <cmath>
 #include "ray_intersect_box.h"
 
-// TODO: remove redundant code, make this class inherit from Sphere and use its existing intersection method
+// TODO: remove redundant code: make SphereAnim use Sphere's existing intersection method.
+// For some reason, it didn't work before, so figure out how to do it.
 bool SphereAnim::intersect(
     const Ray &ray, const double min_t, double &t, Eigen::Vector3d &n, std::shared_ptr<Object> &descendant) const
 {

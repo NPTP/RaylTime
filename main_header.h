@@ -47,6 +47,7 @@ void collect_animators(std::vector<std::shared_ptr<Object>>& objects,
     std::shared_ptr<Animator> object_is_animator;
     for (int i = 0; i < objects.size(); i++)
     {
+        // Cast object as animator. Will return valid pointer if it is actually an aimator
         object_is_animator = std::dynamic_pointer_cast<Animator>(objects[i]);
         if (object_is_animator)
             animators.push_back(object_is_animator);

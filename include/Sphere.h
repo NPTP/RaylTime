@@ -23,6 +23,9 @@ public:
         this->radius = radius;
     }
 
+    // Default constructor (should be useful for subclasses only!)
+    Sphere() = default;
+
     /*
     Given ray and min_t minimum parametric distance to consider,
     change t to parametric distance to intersection, n to normal on sphere

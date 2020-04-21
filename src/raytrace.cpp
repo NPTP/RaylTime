@@ -4,16 +4,16 @@
 void raytrace(
     const int height,
     const int width,
-    const Camera& camera,
-    const std::shared_ptr<AABBTree>& root,
-    const std::vector<std::shared_ptr<Light>>& lights,
-    SDL_Renderer*& renderer)
+    const Camera &camera,
+    const std::shared_ptr<AABBTree> &root,
+    const std::vector<std::shared_ptr<Light>> &lights,
+    SDL_Renderer *&renderer)
 {
     // Clamp function for RGB return values
     auto clamp = [](double s) { return std::max(std::min(s, 1.0), 0.0); };
     std::vector<int> rgb_image(3 * width * height);
 
-    #pragma omp parallel for // Multithread the raytraces. Note 'collapse(2)' directive requires higher version of OMP
+#pragma omp parallel for // Multithread the raytraces. Note 'collapse(2)' directive requires higher version of OMP
     for (int y = 0; y < height; y++)
     {
         for (int x = 0; x < width; x++)
@@ -52,35 +52,36 @@ void raytrace(
             {
                 double r_top, g_top, b_top, r_bottom, g_bottom, b_bottom,
                     r_left, g_left, b_left, r_right, g_right, b_right;
-                r_top = g_top = b_top = r_bottom = g_bottom = b_bottom = 
+                r_top = g_top = b_top = r_bottom = g_bottom = b_bottom =
                     r_left = g_left = b_left = r_right = g_right = b_right = 0.0;
                 double num_values = 0.0; // Won't get div by 0 with prescribed resolutions
 
-                // TODO: implement a helper function which discards pixels of colours that are too different.
-                // e.g. subtract claimed pixel colour from target pixel colour, then dot with (1,1,1), and discard
-                // if result is too close to 0...? But how to choose which pixel is "claimed pixel colour"?
-                if (y > 0) {
+                if (y > 0)
+                {
                     r_top = rgb_image[r - 3 * width];
                     g_top = rgb_image[g - 3 * width];
                     b_top = rgb_image[b - 3 * width];
                     num_values += 1.0;
                 }
 
-                if (y < height - 1) {
+                if (y < height - 1)
+                {
                     r_bottom = rgb_image[r + 3 * width];
                     g_bottom = rgb_image[g + 3 * width];
                     b_bottom = rgb_image[b + 3 * width];
                     num_values += 1.0;
                 }
 
-                if (x > 0) {
+                if (x > 0)
+                {
                     r_left = rgb_image[r - 3];
                     g_left = rgb_image[g - 3];
                     b_left = rgb_image[b - 3];
                     num_values += 1.0;
                 }
 
-                if (x < width - 1) {
+                if (x < width - 1)
+                {
                     r_right = rgb_image[r + 3];
                     g_right = rgb_image[g + 3];
                     b_right = rgb_image[b + 3];
@@ -91,14 +92,13 @@ void raytrace(
                 rgb_image[g] = (g_top + g_bottom + g_left + g_right) / num_values;
                 rgb_image[b] = (b_top + b_bottom + b_left + b_right) / num_values;
             }
-           
+
             SDL_SetRenderDrawColor(renderer,
-                rgb_image[r],
-                rgb_image[g],
-                rgb_image[b],
-                255);
+                                   rgb_image[r],
+                                   rgb_image[g],
+                                   rgb_image[b],
+                                   255);
             SDL_RenderDrawPoint(renderer, x, y);
         }
     }
-
 }

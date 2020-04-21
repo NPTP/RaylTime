@@ -1,27 +1,27 @@
 #ifndef SPHERE_ANIM_H
 #define SPHERE_ANIM_H
 
+#include "Sphere.h"
 #include "Animator.h"
 #include "insert_sphereanim_into_box.h"
 #include <Eigen/Core>
 
-/* Animated version of Sphere. */
-class SphereAnim : public Animator
+/* Animated Sphere with specific dimensions in constructor.  */
+class SphereAnim : public Sphere, public Animator
 {
 public:
-    Eigen::Vector3d center;
     double radius, max_height, min_height;
     bool moving_up, moving_down;
 
     // Constructor inserts the animating sphere into its own bounding box.
-    SphereAnim(const Eigen::Vector3d center, const double radius, const int &level_height)
+    SphereAnim(const Eigen::Vector3d world_center, const double radius, const int &level_height)
     {
         insert_sphereanim_into_box(
-            center,
+            world_center,
             radius,
             level_height,
             this->box);
-        this->center = center;
+        this->center = world_center;
         this->radius = radius;
         this->moving_up = true;
         this->moving_down = false;
@@ -29,18 +29,12 @@ public:
         this->min_height = radius;
     }
 
-    /*
-    Given ray and min_t minimum parametric distance to consider,
-    change t to parametric distance to intersection, n to normal on
-    animated sphere at point of intersection.
-    Return true if there is an intersection, false if not.
-    */
     bool intersect(
-        const Ray &ray,
+        const Ray& ray,
         const double min_t,
-        double &t,
-        Eigen::Vector3d &n,
-        std::shared_ptr<Object> &descendant) const;
+        double& t,
+        Eigen::Vector3d& n,
+        std::shared_ptr<Object>& descendant) const;
 
     /*
     Animate the sphere! No arguments, just moves the sphere up and down

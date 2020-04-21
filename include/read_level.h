@@ -149,14 +149,15 @@ void parse_char(const char &c,
     {
         objects.push_back(new_floor_quad(U, W));
     }
-    else if (c == 't' || c == 'T') // TRIANGLE
+    else if (c == 't' || c == 'T') // TRIANGLE ANIMATOR
     {
+        // TODO: allow for a large animating triangle by using 'T', like with the two sizes of Sphere.
         std::shared_ptr<TriangleAnim> triangleanim(new TriangleAnim(Eigen::Vector3d(U, V, W), LEVEL_HEIGHT, UNIT_SIZE));
         set_random_material(triangleanim->material, "REFLECTIVE");
         objects.push_back(triangleanim);
         objects.push_back(new_floor_quad(U, W));
     }
-    else if (c == 'o' || c == 'O') // SPHERE
+    else if (c == 'o' || c == 'O') // SPHERE ANIMATOR
     {
         int radius;
         if (c == 'o')

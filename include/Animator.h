@@ -1,14 +1,12 @@
 #ifndef ANIMATOR_H
 #define ANIMATOR_H
 
-#include "Object.h"
-
 /*
-Abstract subclass of Object which allows for differentiation
-of static and animating objects. In terms of implementation, the
-only difference is a new animate() member function.
+Abstract class allowing for differentiation of static and animating objects.
+However, does not inherit from Object: meant to be used in parallel inheritance.
+Simply adds an animate() member function to children.
 */
-class Animator : public Object
+class Animator
 {
 public:
     virtual void animate() = 0;
