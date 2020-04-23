@@ -148,8 +148,18 @@ void parse_char(const char &c,
     }
     else if (c == 't' || c == 'T') // TRIANGLE ANIMATOR
     {
-        // TODO: allow for a large animating triangle by using 'T', like with the two sizes of Sphere.
-        std::shared_ptr<TriangleAnim> triangleanim(new TriangleAnim(Eigen::Vector3d(U, V, W), LEVEL_HEIGHT, UNIT_SIZE));
+        double circumradius;
+        if (c == 't')
+            circumradius = 0.25;
+        else
+            circumradius = 0.5;
+
+        std::shared_ptr<TriangleAnim> triangleanim(
+            new TriangleAnim(
+                Eigen::Vector3d(U, V, W),
+                circumradius,
+                LEVEL_HEIGHT,
+                UNIT_SIZE));
         set_random_material(triangleanim->material, "REFLECTIVE");
         objects.push_back(triangleanim);
         objects.push_back(new_floor_quad(U, W));
