@@ -10,7 +10,7 @@
 class SphereAnim : public Sphere, public Animator
 {
 public:
-    double radius, max_height, min_height;
+    double max_height, min_height;
     bool moving_up, moving_down;
 
     // Constructor inserts the animating sphere into its own bounding box.
@@ -28,13 +28,6 @@ public:
         this->max_height = level_height - radius;
         this->min_height = radius;
     }
-
-    bool intersect(
-        const Ray& ray,
-        const double min_t,
-        double& t,
-        Eigen::Vector3d& n,
-        std::shared_ptr<Object>& descendant) const;
 
     /*
     Animate the sphere! No arguments, just moves the sphere up and down

@@ -4,9 +4,6 @@
 #include <vector>
 #include <string>
 #include <memory>
-// Forward declaration
-struct Object;
-struct Light;
 
 /*
 Read a level description from a text file

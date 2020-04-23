@@ -25,6 +25,7 @@
 uint8_t G_show_boxes = 0x00;
 int G_show_boxes_depth = 0;
 int G_raytrace_recursion_depth = DEFAULT_RAYTRACE_RECURSION_DEPTH;
+int G_max_t_draw_distance = 100;
 
 /* Main event loop */
 int main(int argc, char *argv[])
@@ -137,15 +138,13 @@ int main(int argc, char *argv[])
                 case SDLK_b:
                     G_show_boxes = G_show_boxes ^ 0x01;
                     break;
-                /* [-] Reduce AABB tree visualization depth. */
-                case SDLK_MINUS:
-                case SDLK_KP_MINUS:
+                /* [N] Reduce AABB tree visualization depth. */
+                case SDLK_n:
                     if (G_show_boxes_depth > 0)
                         G_show_boxes_depth--;
                     break;
-                /* [+] Increase AABB tree visualization depth. */
-                case SDLK_EQUALS:
-                case SDLK_KP_PLUS:
+                /* [M] Increase AABB tree visualization depth. */
+                case SDLK_m:
                     G_show_boxes_depth++;
                     break;
                 /* [[] Reduce raytracing recursion depth. */
@@ -157,6 +156,15 @@ int main(int argc, char *argv[])
                 case SDLK_RIGHTBRACKET:
                     if (G_raytrace_recursion_depth < 10)
                         G_raytrace_recursion_depth++;
+                    break;
+                /* [-] Reduce parametric draw distance. */
+                case SDLK_MINUS:
+                    if (G_max_t_draw_distance > 1)
+                        G_max_t_draw_distance--;
+                    break;
+                /* [=] Increase parametric draw distance. */
+                case SDLK_EQUALS:
+                    G_max_t_draw_distance++;
                     break;
                 /* [1-5] Set pixel resolution */
                 case SDLK_1:

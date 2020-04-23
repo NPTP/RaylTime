@@ -13,4 +13,7 @@ extern int G_show_boxes_depth;
 /* Gives the recursion depth of raytracing for reflections. */
 extern int G_raytrace_recursion_depth;
 
+/* Draw distance in parametric value. */
+extern int G_max_t_draw_distance;
+
 #endif

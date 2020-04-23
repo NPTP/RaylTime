@@ -4,7 +4,7 @@
 ## Ongoing to-dos for this project (This section to be removed on completion)
 - Clean up TODOs in code
 - Draw closer objects first, stop when you've got a colour (do we need to bring back point squared distance??). Perhaps also set a default draw distance and add ability to change view distance (use max_t values, should increase performance, make it changeable) -> then add it to readme below. Maybe make light fall off with distance so it looks like it "fogs out" into darkness instead of just cuts off.
-- Point light intensity fall-off using the t-values in blinnphong (1/t * contribution from that light source)
+- Point light intensity fall-off using the t-values in blinnphong (use linear: ((-1/max_distance) * t + 1))
 - UI: show "Show bounding boxes: ON/OFF", "Bounding box tree depth: _", and "Raytrace recursion depth: _".
 - Support collision using the AABB tree (box around camera) (bring back box->intersect(box) code)
 - One of the todos is moving sdl2.dll into the build folder automatically if it's not already there. Use the existing 32/64 env check at the top of main.cpp to know which dll to use. Helpful sample code:
@@ -64,10 +64,12 @@ Run `rayltime` and it will start with `defaultlevel.txt` as the default level. O
 - `LEFT ARROW` : Turn left
 - `RIGHT ARROW` : Turn right
 - `B` : Toggle bounding box visualization
-  - `+` : Show deeper depth of bounding box tree
-  - `-` : Show shallower depth of bounding box tree
-- `]` : Increase raytracing reflection recursive depth (default 2, max 10)
-- `[` : Decrease raytracing reflection recursive depth (min 0)
+  - `N` : Show shallower depth of bounding box tree
+  - `M` : Show deeper depth of bounding box tree
+- `[` : Decrease raytracing reflection recursive depth (default 2, min 0)
+- `]` : Increase raytracing reflection recursive depth (max 10)
+- `-` : Decrease draw distance
+- `=` : Increase draw distance
 - `R` : Reload level (will load any changes made to level file; allows for "nearly live" editing)
 
 Additional controls for **maximum exploration**:
