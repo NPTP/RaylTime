@@ -34,7 +34,12 @@ struct AABBTree : public Object, public std::enable_shared_from_this<AABBTree>
     AABBTree(
         const std::vector<std::shared_ptr<Object>> &objects,
         int depth = 0);
-    // Object implementations (see Object.h for API)
+
+    /*
+    Return a pointer to the closest descendant of the tree hit by ray.
+    Populates t (> min_t) with the parametric distance to that descendant,
+    and n with the normal of the surface at the hit.
+    */
     bool intersect(
         const Ray &ray,
         const double min_t,

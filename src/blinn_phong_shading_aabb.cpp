@@ -21,29 +21,25 @@ Eigen::Vector3d blinn_phong_shading_aabb(
         ambient_ia = 1.0;
     else
         ambient_ia = AMBIENT_LIGHT_DEFAULT_VAL;
-    
+
     // Set up resources for computing shading from light sources. Shading starts with adding the ambient term.
     // (Ambient term is ignored, set to fullbright (1.0) when showing bounding boxes.)
     Eigen::Vector3d blinn_phong = descendant->material->ka * (G_show_boxes ? 1.0 : ambient_ia);
 
-    Eigen::Vector3d l, dummy_normal;
-    Eigen::Vector3d q = ray.origin + t * ray.direction; // Query point 'q'
     Ray ray_to_light;
-    ray_to_light.origin = q;
+    ray_to_light.origin = ray.origin + t * ray.direction; // Query point 'q'
     double t_to_light, t_to_object;
+    Eigen::Vector3d l, dummy_normal;
     std::shared_ptr<Object> dummy_descendant;
 
     // Iterate through lights for this object.
     for (int i = 0; i < lights.size(); i++)
     {
-        // Put the direction toward the light in the (normalized) vector l.
-        lights[i]->direction(q, l, t_to_light);
+        // Put the normalized direction toward the light in the direction vector.
+        lights[i]->direction(ray_to_light.origin, ray_to_light.direction, t_to_light);
 
-        // Give ray to light the direction to THIS light.
-        ray_to_light.direction = l;
-
-        // TODO: make a first_hit reduced function specifically for this call.
-        bool hit_object = first_hit_aabb(ray_to_light, BP_EPSILON, root, dummy_descendant, t_to_object, dummy_normal);
+        // Check for hits between object and light.
+        bool hit_object = root->intersect(ray_to_light, BP_EPSILON, t_to_object, dummy_normal, dummy_descendant);
 
         // Check if there was no hit, meaning no blocked path to the light.
         // Also check if there was a hit, but that hit was further away than the light.
@@ -58,7 +54,7 @@ Eigen::Vector3d blinn_phong_shading_aabb(
             v = (-1 * ray.direction).normalized();
             h = (v + l).normalized();
             double n_dot_h = n.dot(h);
-            if (n_dot_h <= descendant->material->tau) // specular term is negligible
+            if (n_dot_h <= descendant->material->tau) // If specular term is negligible, skip computation
                 specular = Eigen::Vector3d(0.0, 0.0, 0.0);
             else
                 specular = (descendant->material->ks.cwiseProduct(lights[i]->I)) * pow(std::max(0.0, n_dot_h), descendant->material->phong_exponent);
