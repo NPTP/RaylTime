@@ -11,8 +11,7 @@ bool AABBTree::intersect(
     Eigen::Vector3d &n,
     std::shared_ptr<Object> &descendant) const
 {
-    bool ray_intersected_box = ray_intersect_box(ray, this->box, min_t, std::numeric_limits<double>::infinity());
-    if (!ray_intersected_box)
+    if (!ray_intersect_box(ray, this->box, min_t, std::numeric_limits<double>::infinity()))
         return false;
 
     // Visualization of AABB Tree. Skips the rest of tree traversal logic.
@@ -20,7 +19,7 @@ bool AABBTree::intersect(
     {
         t = 1.0;
         n = -ray.direction;
-        // descendant = this->shared_from_this(); // TODO: fix this.
+        // std::shared_ptr<AABBTree> d = this->shared_from_this(); // TODO: fix this.
         return true;
     }
 
