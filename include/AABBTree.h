@@ -20,6 +20,9 @@ class AABBTree : public Object, public std::enable_shared_from_this<AABBTree>
         // For debugging, keep track of the number leaf, descendants
         int num_leaves;
 
+        /*
+        Get a shared pointer to this node of the tree. Used for tree/box visualization.
+        */
         std::shared_ptr<AABBTree> get_shared_ptr()
         {
             return shared_from_this();
@@ -51,7 +54,7 @@ class AABBTree : public Object, public std::enable_shared_from_this<AABBTree>
             const double min_t,
             double &t,
             Eigen::Vector3d &n,
-            std::shared_ptr<Object> &descendant) const override;
+            std::shared_ptr<Object> &descendant) override;
 };
 
 #endif
