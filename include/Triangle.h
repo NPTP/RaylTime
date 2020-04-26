@@ -39,7 +39,7 @@ public:
         const double min_t,
         double &t,
         Eigen::Vector3d &n,
-        std::shared_ptr<Object> &descendant) const;
+        std::shared_ptr<Object> &descendant);
 };
 
 #endif

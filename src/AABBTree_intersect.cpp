@@ -1,7 +1,6 @@
 #include "AABBTree.h"
 #include <limits>
 #include "Sphere.h"
-#include "AABB_visualized.h"
 #include "globals.h"
 
 bool AABBTree::intersect(
@@ -9,7 +8,7 @@ bool AABBTree::intersect(
     const double min_t,
     double & t,
     Eigen::Vector3d & n,
-    std::shared_ptr<Object> & descendant) const
+    std::shared_ptr<Object> & descendant)
 {
     bool ray_intersected_box = ray_intersect_box(ray, this->box, min_t, std::numeric_limits<double>::infinity());
     if (!ray_intersected_box)
@@ -18,11 +17,9 @@ bool AABBTree::intersect(
     // Visualization of AABB Tree. Skips the rest of tree traversal logic.
     if (G_show_boxes && this->depth == G_show_boxes_depth)
     {
-        // TODO: clean this up with a more specific implementation using this->get_shared_ptr()
         t = 1;
         n = -ray.direction;
-        std::shared_ptr<AABB_visualized> AABB(new AABB_visualized(this->material));
-        descendant = AABB;
+        descendant = this->get_shared_ptr();
         return true;
     }
 

@@ -4,7 +4,6 @@
 
 ## Ongoing to-dos for this project (This section to be removed on completion)
 
-- Clean up TODOs in code
 - Get pixel colours array in raytrace.cpp to be contiguous in memory rather than std vector dynamic implementation?
 - Draw closer objects first, stop when you've got a colour (do we need to bring back point squared distance??). Perhaps also set a default draw distance and add ability to change view distance (use max_t values, should increase performance, make it changeable) -> then add it to readme below. Maybe make light fall off with distance so it looks like it "fogs out" into darkness instead of just cuts off.
 - Point light intensity fall-off using the t-values in blinnphong (use linear: ((-1/max_distance) \* t + 1))

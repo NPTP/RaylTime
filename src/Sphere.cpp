@@ -4,7 +4,7 @@
 #include "ray_intersect_box.h"
 
 bool Sphere::intersect(
-    const Ray &ray, const double min_t, double &t, Eigen::Vector3d &n, std::shared_ptr<Object> &descendant) const
+    const Ray &ray, const double min_t, double &t, Eigen::Vector3d &n, std::shared_ptr<Object> &descendant) 
 {
     // Set up quadratic equation for implicit sphere equation.
     Eigen::Vector3d e_minus_c = ray.origin - this->center;

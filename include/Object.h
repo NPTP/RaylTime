@@ -26,7 +26,7 @@ public:
         const double min_t,
         double &t,
         Eigen::Vector3d &n,
-        std::shared_ptr<Object> &descendant) const = 0; // = 0 ensures function is defined (as no-op)
+        std::shared_ptr<Object> &descendant) = 0; // = 0 ensures function is defined (as no-op)
 
     BoundingBox box;
 };
