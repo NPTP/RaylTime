@@ -4,7 +4,7 @@
 #include "Object.h"
 #include <Eigen/Core>
 
-// TODO A(3): better description, and see if we even want this class implemented this way at all.
+// TODO: better description, and see if we even want this class implemented this way at all.
 // Dummy class for visualized AABBs.
 class AABB_visualized : public Object
 {
@@ -15,11 +15,11 @@ public:
     }
     // DO NOT USE! - Dummy intersection method.
     bool intersect(
-        const Ray &ray,
+        const Ray& ray,
         const double min_t,
-        double &t,
-        Eigen::Vector3d &n,
-        std::shared_ptr<Object> &descendant) const
+        double& t,
+        Eigen::Vector3d& n,
+        std::shared_ptr<Object>& descendant) const
     {
         return true;
     }
