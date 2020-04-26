@@ -1,7 +1,6 @@
 #include "AABBTree.h"
 #include <limits>
 #include "Sphere.h"
-#include "AABB_visualized.h"
 #include "globals.h"
 
 bool AABBTree::intersect(
