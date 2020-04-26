@@ -100,7 +100,7 @@ AABBTree::AABBTree(
             }
             left_objects.erase(left_objects.begin() + (n/2), left_objects.begin() + n);
         }
-        else if (right_objects.size() == n) // TODO: remove this comment if all works // objects.size()
+        else if (right_objects.size() == objects.size())
         {
             for (int i = 0; i < n / 2; i++)
             {
@@ -110,7 +110,7 @@ AABBTree::AABBTree(
         }
 
         // Initialize left child and right child with new AABBTrees using the left & right object lists.
-        std::shared_ptr<AABBTree> left_child( new AABBTree(left_objects,  depth+1));
+        std::shared_ptr<AABBTree> left_child( new AABBTree(left_objects, depth+1));
         std::shared_ptr<AABBTree> right_child(new AABBTree(right_objects, depth+1));
         this->left  = left_child;
         this->right = right_child;
