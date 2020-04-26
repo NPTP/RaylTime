@@ -19,15 +19,13 @@ std::ofstream  dst("SDL2.dll",   std::ios::binary);
 dst << src.rdbuf();
 ```
 
-- Texture mapping?
+#### "Maybe" features or holdovers for RaylTime 2!
+
+- Refraction (with moving "glass" objects to showcase it)
+- Texture mapping on quads
 - Get things on the GPU if possible, increase performance (& default resolution?)
-
-#### "Maybe" features
-
-- In-engine level selector at startup?
-- Refraction
-- Texture-mapped wall/floor/ceiling quads
-- Support triangle soups/STLs ?
+- In-engine level selector at startup
+- Support triangle soups/STLs
 
 #### Useful links while working
 
