@@ -17,33 +17,31 @@ Eigen::Vector3d blinn_phong_shading_aabb(
 {
     // set ambient light (fullbright if this surface is a light "fixture" surface).
     double ambient_ia;
-    if (descendant->material->is_light)
+    if (G_show_boxes || descendant->material->is_light)
         ambient_ia = 1.0;
     else
         ambient_ia = AMBIENT_LIGHT_DEFAULT_VAL;
     
     // Set up resources for computing shading from light sources. Shading starts with adding the ambient term.
     // (Ambient term is ignored, set to fullbright (1.0) when showing bounding boxes.)
-    Eigen::Vector3d blinn_phong = descendant->material->ka * (G_show_boxes ? 1.0 : ambient_ia);
+    Eigen::Vector3d blinn_phong = descendant->material->ka * ambient_ia;
 
-    Eigen::Vector3d l, dummy_normal;
-    Eigen::Vector3d q = ray.origin + t * ray.direction; // Query point 'q'
     Ray ray_to_light;
-    ray_to_light.origin = q;
+    ray_to_light.origin = ray.origin + t * ray.direction;
     double t_to_light, t_to_object;
+    Eigen::Vector3d l, dummy_normal;
     std::shared_ptr<Object> dummy_descendant;
 
     // Iterate through lights for this object.
     for (int i = 0; i < lights.size(); i++)
     {
         // Put the direction toward the light in the (normalized) vector l.
-        lights[i]->direction(q, l, t_to_light);
+        lights[i]->direction(ray_to_light.origin, l, t_to_light);
 
         // Give ray to light the direction to THIS light.
         ray_to_light.direction = l;
 
-        // TODO: make a first_hit reduced function specifically for this call.
-        bool hit_object = first_hit_aabb(ray_to_light, BP_EPSILON, root, dummy_descendant, t_to_object, dummy_normal);
+        bool hit_object = root->intersect(ray_to_light, BP_EPSILON, t_to_object, dummy_normal, dummy_descendant);
 
         // Check if there was no hit, meaning no blocked path to the light.
         // Also check if there was a hit, but that hit was further away than the light.

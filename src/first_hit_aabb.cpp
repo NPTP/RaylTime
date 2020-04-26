@@ -1,6 +1,7 @@
 #include "first_hit_aabb.h"
 #include <limits>
 
+// TODO: remove this entirely (and its header file) if not used anymore
 bool first_hit_aabb(
     const Ray &ray,
     const double min_t,
