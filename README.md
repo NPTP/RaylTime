@@ -126,7 +126,8 @@ This is the tile legend for making your own levels. Note that objects and lights
 > - `M` = High mirror block
 > - `m` = Low mirror block
 > - `.` = Floor tile
-> - `t` = Floating spinning triangle
+> - `t` = Small spinning triangle
+> - `T` = Large spinning triangle
 > - `o` = Small floating sphere
 > - `O` = Large floating sphere
 > - `D` = Directional light (random direction). Position is irrelevant, affects whole scene
