@@ -4,7 +4,7 @@
 #include <iostream>
 
 bool Quad::intersect(
-    const Ray &ray, const double min_t, double &t, Eigen::Vector3d &n, std::shared_ptr<Object> & descendant) const
+    const Ray &ray, const double min_t, double &t, Eigen::Vector3d &n, std::shared_ptr<Object> & descendant) 
 {
     // Collect and name vertices of parallelogram in counter-clockwise winding
     Eigen::Vector3d v0 = std::get<0>(this->corners);
