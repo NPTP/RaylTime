@@ -1,6 +1,5 @@
 #include "blinn_phong_shading_aabb.h"
 #include <cmath>
-#include "first_hit_aabb.h"
 #include "globals.h"
 
 // Ambient light default level and reflection displacement constant

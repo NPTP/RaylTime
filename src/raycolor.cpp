@@ -1,5 +1,4 @@
 #include "raycolor.h"
-#include "first_hit_aabb.h"
 #include "blinn_phong_shading_aabb.h"
 #include "reflect.h"
 #include "globals.h"
