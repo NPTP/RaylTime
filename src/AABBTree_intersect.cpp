@@ -18,10 +18,11 @@ bool AABBTree::intersect(
     // Visualization of AABB Tree. Skips the rest of tree traversal logic.
     if (G_show_boxes && this->depth == G_show_boxes_depth)
     {
-        // TODO: clean this up with a more specific implementation
-        t = 1.0;
-        n = -ray.direction;
-        // descendant = this->shared_from_this(); // TODO: fix this.
+        // TODO: clean this up with a more specific implementation using this->get_shared_ptr()
+        t = 10.0;                       // Irrelevant value
+        n = Eigen::Vector3d(0, 0, 1.0); // Irrelevant value
+        std::shared_ptr<AABB_visualized> AABB(new AABB_visualized(this->material));
+        descendant = AABB;
         return true;
     }
 

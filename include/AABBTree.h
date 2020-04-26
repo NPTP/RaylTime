@@ -11,7 +11,7 @@
 // TODO: return to struct (and remove access modifiers)? Or remain as class (probably better tbh)?
 class AABBTree : public Object, public std::enable_shared_from_this<AABBTree>
 {
-    private:
+    public:
         // Pointers to left and right subtree branches, either another node of tree
         // or an object primitive
         std::shared_ptr<Object> left;
@@ -42,7 +42,6 @@ class AABBTree : public Object, public std::enable_shared_from_this<AABBTree>
             const std::vector<std::shared_ptr<Object>> &objects,
             int depth = 0);
 
-    public:
         /*
         Return a pointer to the closest descendant of the tree hit by ray.
         Populates t (> min_t) with the parametric distance to that descendant,
