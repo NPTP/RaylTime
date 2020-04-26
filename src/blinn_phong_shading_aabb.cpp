@@ -1,6 +1,5 @@
 #include "blinn_phong_shading_aabb.h"
 #include <cmath>
-#include "globals.h"
 
 // Ambient light default level and reflection displacement constant
 #define AMBIENT_LIGHT_DEFAULT_VAL 0.1
@@ -14,9 +13,9 @@ Eigen::Vector3d blinn_phong_shading_aabb(
     const std::shared_ptr<AABBTree> &root,
     const std::vector<std::shared_ptr<Light>> &lights)
 {
-    // set ambient light (fullbright if this surface is a light "fixture" surface).
+    // set ambient light (fullbright if this surface is an AABB visualization or a light "fixture" surface).
     double ambient_ia;
-    if (G_show_boxes || descendant->material->is_light)
+    if (descendant->material->is_light)
         ambient_ia = 1.0;
     else
         ambient_ia = AMBIENT_LIGHT_DEFAULT_VAL;
@@ -55,7 +54,7 @@ Eigen::Vector3d blinn_phong_shading_aabb(
             v = (-1 * ray.direction).normalized();
             h = (v + l).normalized();
             double n_dot_h = n.dot(h);
-            if (n_dot_h <= descendant->material->tau) // specular term is negligible
+            if (n_dot_h <= descendant->material->tau) // If specular term is negligible, skip computation
                 specular = Eigen::Vector3d(0.0, 0.0, 0.0);
             else
                 specular = (descendant->material->ks.cwiseProduct(lights[i]->I)) * pow(std::max(0.0, n_dot_h), descendant->material->phong_exponent);

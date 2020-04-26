@@ -5,8 +5,7 @@
 #include <Eigen/Core>
 
 
-// TODO: better description, and see if we even want this class implemented this way at all.
-// TODO A(3): delete this class if you get things working without it.
+// TODO: Remove class once replaced by better implementation.
 // Dummy class for visualized AABBs.
 class AABB_visualized : public Object
 {

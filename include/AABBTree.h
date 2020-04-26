@@ -8,7 +8,6 @@
 #include <vector>
 #include "ray_intersect_box.h"
 
-// TODO: return to struct (and remove access modifiers)? Or remain as class (probably better tbh)?
 class AABBTree : public Object, public std::enable_shared_from_this<AABBTree>
 {
     public:

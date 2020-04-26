@@ -19,8 +19,8 @@ bool AABBTree::intersect(
     if (G_show_boxes && this->depth == G_show_boxes_depth)
     {
         // TODO: clean this up with a more specific implementation using this->get_shared_ptr()
-        t = 10.0;                       // Irrelevant value
-        n = Eigen::Vector3d(0, 0, 1.0); // Irrelevant value
+        t = 1;
+        n = -ray.direction;
         std::shared_ptr<AABB_visualized> AABB(new AABB_visualized(this->material));
         descendant = AABB;
         return true;

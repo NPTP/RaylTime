@@ -11,7 +11,9 @@ void set_random_aabb_colour(std::shared_ptr<Material>& vis_mat)
     new_mat->kd = Eigen::Vector3d::Zero();
     new_mat->ks = Eigen::Vector3d::Zero();
     new_mat->km = Eigen::Vector3d::Zero();
-    new_mat->phong_exponent = 0;
+    new_mat->phong_exponent = 0.0;
+    new_mat->tau = -1.0;
+    new_mat->is_light = true;
     vis_mat = new_mat;
 }
 
@@ -100,7 +102,7 @@ AABBTree::AABBTree(
             }
             left_objects.erase(left_objects.begin() + (n/2), left_objects.begin() + n);
         }
-        else if (right_objects.size() == n) // TODO: remove this comment if all works // objects.size()
+        else if (right_objects.size() == n)
         {
             for (int i = 0; i < n / 2; i++)
             {
