@@ -1,7 +1,7 @@
 #include "raytrace.h"
-#include <mutex>
 
 void raytrace(
+    int *&rgb_image,
     const int height,
     const int width,
     const Camera &camera,
@@ -9,9 +9,6 @@ void raytrace(
     const std::vector<std::shared_ptr<Light>> &lights,
     SDL_Renderer *&renderer)
 {
-    // Clamp function for RGB return values
-    auto clamp = [](double s) { return std::max(std::min(s, 1.0), 0.0); };
-    std::vector<int> rgb_image(3 * width * height);
 
 #pragma omp parallel for // Multithread the raytraces. Note 'collapse(2)' directive requires higher version of OMP
     for (int y = 0; y < height; y++)

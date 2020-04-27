@@ -10,7 +10,7 @@ class DirectionalLight : public Light
 {
 public:
     // Direction from light toward scene.
-    Eigen::Vector3d d;
+    Eigen::Vector3d light_direction;
 
     /* Given a query point return direction toward Light.
     

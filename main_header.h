@@ -25,7 +25,7 @@
 // Helper function forward implementations
 
 // Pixel/raycast resolution profiles 1-5
-void set_logical_resolution(SDL_Renderer*& renderer, int& w, int& h, const char& c)
+void set_logical_resolution(int *&rgb_image, SDL_Renderer*& renderer, int& w, int& h, const char& c)
 {
     switch (c)
     {
@@ -36,6 +36,11 @@ void set_logical_resolution(SDL_Renderer*& renderer, int& w, int& h, const char&
     case '5': w = 320;  h = 180; break;
     default:  w = 160;  h = 90;
     }
+
+    int* trash = rgb_image;
+    rgb_image = new int[3 * w * h];
+    delete[] trash;
+
     SDL_RenderSetLogicalSize(renderer, w, h);
 }
 

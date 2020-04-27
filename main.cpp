@@ -50,7 +50,8 @@ int main(int argc, char *argv[])
         &window,
         &renderer);
     int rt_width, rt_height;
-    set_logical_resolution(renderer, rt_width, rt_height, '3');
+    int* rgb_image = new int[1]; // Initialize so rgb_image doesn't point at anything important
+    set_logical_resolution(rgb_image, renderer, rt_width, rt_height, '3');
 
     SDL_Event event;
     bool quit = false;
@@ -168,19 +169,19 @@ int main(int argc, char *argv[])
                     break;
                 /* [1-5] Set pixel resolution */
                 case SDLK_1:
-                    set_logical_resolution(renderer, rt_width, rt_height, '1');
+                    set_logical_resolution(rgb_image, renderer, rt_width, rt_height, '1');
                     break;
                 case SDLK_2:
-                    set_logical_resolution(renderer, rt_width, rt_height, '2');
+                    set_logical_resolution(rgb_image, renderer, rt_width, rt_height, '2');
                     break;
                 case SDLK_3:
-                    set_logical_resolution(renderer, rt_width, rt_height, '3');
+                    set_logical_resolution(rgb_image, renderer, rt_width, rt_height, '3');
                     break;
                 case SDLK_4:
-                    set_logical_resolution(renderer, rt_width, rt_height, '4');
+                    set_logical_resolution(rgb_image, renderer, rt_width, rt_height, '4');
                     break;
                 case SDLK_5:
-                    set_logical_resolution(renderer, rt_width, rt_height, '5');
+                    set_logical_resolution(rgb_image, renderer, rt_width, rt_height, '5');
                     break;
                 default:
                     break;
@@ -275,7 +276,7 @@ int main(int argc, char *argv[])
 
         // Animate, raytrace and push to screen.
         animate_animators(animators);
-        raytrace(rt_height, rt_width, camera, root, lights, renderer);
+        raytrace(rgb_image, rt_height, rt_width, camera, root, lights, renderer);
         SDL_RenderPresent(renderer);    
     }
 

@@ -188,7 +188,7 @@ void parse_char(const char &c,
     else if (c == 'D') // RANDOM DIRECTIONAL LIGHT
     {
         std::shared_ptr<DirectionalLight> light(new DirectionalLight());
-        light->d = Eigen::Vector3d(unif(re), unif(re), unif(re)).normalized();
+        light->light_direction = Eigen::Vector3d(unif(re), unif(re), unif(re)).normalized();
         light->I = Eigen::Vector3d(0.2 + unif(re) * 0.8, 0.2 + unif(re) * 0.8, 0.2 + unif(re) * 0.8);
         lights.push_back(light);
         objects.push_back(new_floor_quad(U, W));
