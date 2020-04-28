@@ -4,9 +4,8 @@
 
 ## Ongoing to-dos for this project (This section to be removed on completion)
 
-- Set default draw distance and add ability to change view distance (use max_t values, should increase performance, make it changeable) -> then add it to readme below. Maybe make light fall off with distance so it looks like it "fogs out" into darkness instead of just cuts off. All light intensity fall-off using the t-values in blinnphong (use linear: ((-1/max_distance) \* t + 1))
 - Add a light "radius" property (in the `Light` object itself) such that there is a falloff of brightness further from the light. Light objects require radius in constructor. Make that default value in read_level.h cover a radius of 1.5 grid tiles (i.e. covers about 9 tiles altogether when placed in the center). Quite usefully, this also means that we can skip all the intersection checks etc in `blinn_phong_shading_aabb.cpp` when `t_to_light > light.radius` or whatever.
-- UI: show "Show bounding boxes: ON/OFF", "Bounding box tree depth: _/\<max_depth\>", "Raytrace recursion depth: _", and "View distance: _". Maybe also show level/file name?
+- UI: show "Show bounding boxes: ON/OFF", "Bounding box tree depth: _/\<max_depth\>", "Raytrace recursion depth: _", and "View distance: \_". Maybe also show level/file name?
 - Have the AABB tree constructor find a "global" maximum depth of the tree, and use this to limit the box vis tree depth and UI should tell you what the limit is.
 - Support collision using the AABB tree (box around camera) (bring back box->intersect(box) code). Set to some value like double the distance to image plane.
 - Move sdl2.dll into the build folder automatically if it's not already there. Use the existing 32/64 env check at the top of main.cpp to know which dll to use. Helpful sample code:
@@ -17,6 +16,7 @@ std::ifstream  src("../sdl2/lib/x64/SDL2.dll", std::ios::binary);
 std::ofstream  dst("SDL2.dll",   std::ios::binary);
 dst << src.rdbuf();
 ```
+
 - Eliminate all remaining TODOs and clean up code
 
 #### "Maybe" features or holdovers for RaylTime 2!
@@ -49,6 +49,7 @@ RAYLTIME uses the following to improve performance:
 ## How to run
 
 Use CMake to build and run `rayltime`. Be sure to use a release build by setting up CMake appropriately:
+
 ```
 cmake -DCMAKE_BUILD_TYPE=Release ..
 ```
