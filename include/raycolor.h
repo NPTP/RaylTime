@@ -12,6 +12,7 @@ Shoot a ray into a lit scene and collect color information into rgb vector.
 Returns true if a hit was found.
 */
 bool raycolor(
+    const bool &is_from_viewer,
     const Ray &ray,
     const double min_t,
     const std::shared_ptr<AABBTree> &root,

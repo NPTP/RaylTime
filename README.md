@@ -83,8 +83,8 @@ rayltime ../levels/my_level.txt
   - `M` : Show deeper depth of bounding box tree
 - `[` : Decrease raytracing reflection recursive depth (default 2, min 0)
 - `]` : Increase raytracing reflection recursive depth (max 10)
-- `-` : Decrease draw distance
-- `=` : Increase draw distance
+- `-` : Decrease draw distance (default 50, min 10)
+- `=` : Increase draw distance (default 50, max 100)
 - `R` : Reload level (will load any changes made to level file; allows for "nearly live" editing)
 
 Additional controls for **maximum exploration**:

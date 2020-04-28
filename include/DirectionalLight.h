@@ -18,9 +18,9 @@ public:
     q: 3D query point in space
     OUT
     d: direction vector from point towards light.
-    max_t: parametric distance to light: infinite for a directional light
+    t_to_light: parametric distance to light: infinite for a directional light
     */
     void direction(
-        const Eigen::Vector3d &q, Eigen::Vector3d &d, double &max_t) const;
+        const Eigen::Vector3d &q, Eigen::Vector3d &d, double &t_to_light) const;
 };
 #endif

@@ -1,6 +1,7 @@
 #include "ray_intersect_box.h"
+#include <limits>
 
-void component_t_min_max(double& t_c_min, double& t_c_max, double c_min, double c_max, double c_e, double c_d)
+void component_t_min_max(double &t_c_min, double &t_c_max, double c_min, double c_max, double c_e, double c_d)
 {
     if (c_d >= 0)
     {
@@ -19,6 +20,7 @@ void component_t_min_max(double& t_c_min, double& t_c_max, double c_min, double 
 }
 
 bool ray_intersect_box(
+    const bool &is_from_viewer,
     const Ray &ray,
     const BoundingBox &box,
     const double min_t,
@@ -30,14 +32,20 @@ bool ray_intersect_box(
     component_t_min_max(t_y_min, t_y_max, box.min_corner[1], box.max_corner[1], ray.origin[1], ray.direction[1]);
     component_t_min_max(t_z_min, t_z_max, box.min_corner[2], box.max_corner[2], ray.origin[2], ray.direction[2]);
 
+    double draw_dist;
+    if (is_from_viewer)
+        draw_dist = max_t;
+    else
+        draw_dist = std::numeric_limits<double>::infinity();
+
     // Check intervals. Include checks against min_t and max_t to ensure
     // there exists and overlap of intervals among all types of t's.
     if (t_x_min > t_y_max || t_y_min > t_x_max ||
         t_x_min > t_z_max || t_z_min > t_x_max ||
-        t_x_min > max_t || min_t > t_x_max ||
+        t_x_min > draw_dist || min_t > t_x_max ||
         t_y_min > t_z_max || t_z_min > t_y_max ||
-        t_y_min > max_t || min_t > t_y_max ||
-        t_z_min > max_t || min_t > t_z_max)
+        t_y_min > draw_dist || min_t > t_y_max ||
+        t_z_min > draw_dist || min_t > t_z_max)
     {
         return false;
     }

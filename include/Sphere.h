@@ -33,6 +33,7 @@ public:
     Return true if there is an intersection, false if not.
     */
     bool intersect(
+        const bool &is_from_viewer,
         const Ray &ray,
         const double min_t,
         double &t,

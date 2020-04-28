@@ -19,7 +19,7 @@ Eigen::Vector3d blinn_phong_shading_aabb(
         ambient_ia = 1.0;
     else
         ambient_ia = AMBIENT_LIGHT_DEFAULT_VAL;
-    
+
     // Set up resources for computing shading from light sources. Shading starts with adding the ambient term.
     // (Ambient term is ignored, set to fullbright (1.0) when showing bounding boxes.)
     Eigen::Vector3d blinn_phong = descendant->material->ka * ambient_ia;
@@ -39,7 +39,8 @@ Eigen::Vector3d blinn_phong_shading_aabb(
         // Give ray to light the direction to THIS light.
         ray_to_light.direction = l;
 
-        bool hit_object = root->intersect(ray_to_light, BP_EPSILON, t_to_object, dummy_normal, dummy_descendant);
+        // First argument to intersect() tells the ray it is NOT direct from the viewer (for draw distance).
+        bool hit_object = root->intersect(false, ray_to_light, BP_EPSILON, t_to_object, dummy_normal, dummy_descendant);
 
         // Check if there was no hit, meaning no blocked path to the light.
         // Also check if there was a hit, but that hit was further away than the light.
