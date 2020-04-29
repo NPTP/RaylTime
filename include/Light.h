@@ -10,11 +10,11 @@ public:
     virtual ~Light(){};
     /* 
     Given a query point q, return direction d toward light.
-    max_t is parametric distance along d to the light.
+    t_to_light is parametric distance along d to the light.
     */
     virtual void direction(
         const Eigen::Vector3d &q,
         Eigen::Vector3d &d,
-        double &max_t) const = 0;
+        double &t_to_light) const = 0;
 };
 #endif

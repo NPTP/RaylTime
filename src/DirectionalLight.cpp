@@ -2,8 +2,8 @@
 #include <limits>
 
 void DirectionalLight::direction(
-    const Eigen::Vector3d &q, Eigen::Vector3d &d, double &max_t) const
+    const Eigen::Vector3d &q, Eigen::Vector3d &d, double &t_to_light) const
 {
     d = -(this->light_direction).normalized();
-    max_t = std::numeric_limits<double>::infinity();
+    t_to_light = std::numeric_limits<double>::infinity();
 }

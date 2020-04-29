@@ -202,7 +202,7 @@ void parse_char(const char &c,
     else if (c == 'N' || c == 'S' || c == 'E' || c == 'W') // CAMERA
     {
         objects.push_back(new_floor_quad(U, W));
-        camera.d = 1.0; // 3.0;
+        camera.d = 1.0;
         camera.e = Eigen::Vector3d(U, UNIT_SIZE * 0.4, W);
         camera.v = Eigen::Vector3d(0, 1, 0);
         camera.height = 1.0;

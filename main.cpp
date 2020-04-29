@@ -1,16 +1,16 @@
 #include "main_header.h"
 #include "globals.h"
 #ifdef _WIN64
-    #define ENV64
+#define ENV64
 #elif _WIN32
-    #define ENV32
+#define ENV32
 #else
-   if(sizeof(void*)==8)
-        #define ENV64
-   else if (sizeof(void*)==4) 
-        #define ENV32
-    else
-        #error "ENV NOT DEFINED (32 OR 64 BIT)"
+if (sizeof(void *) == 8)
+#define ENV64
+    else if (sizeof(void *) == 4)
+#define ENV32
+        else
+#error "ENV NOT DEFINED (32 OR 64 BIT)"
 #endif
 
 //Screen dimension constants (not pixel resolution)
@@ -25,7 +25,7 @@
 uint8_t G_show_boxes = 0x00;
 int G_show_boxes_depth = 0;
 int G_raytrace_recursion_depth = DEFAULT_RAYTRACE_RECURSION_DEPTH;
-int G_max_t_draw_distance = 100;
+int G_max_t_draw_distance = 50;
 
 /* Main event loop */
 int main(int argc, char *argv[])
@@ -40,8 +40,8 @@ int main(int argc, char *argv[])
         return -1;
 
     // Initialize SDL, renderer, and window
-    SDL_Window* window;
-    SDL_Renderer* renderer;
+    SDL_Window *window;
+    SDL_Renderer *renderer;
     SDL_Init(SDL_INIT_VIDEO);
     SDL_CreateWindowAndRenderer(
         WINDOW_WIDTH,
@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
         &window,
         &renderer);
     int rt_width, rt_height;
-    int* rgb_image = new int[1]; // Initialize so rgb_image doesn't point at anything important
+    int *rgb_image = new int[1]; // Initialize so rgb_image doesn't point at anything important
     set_logical_resolution(rgb_image, renderer, rt_width, rt_height, '3');
 
     SDL_Event event;
@@ -160,12 +160,13 @@ int main(int argc, char *argv[])
                     break;
                 /* [-] Reduce parametric draw distance. */
                 case SDLK_MINUS:
-                    if (G_max_t_draw_distance > 1)
+                    if (G_max_t_draw_distance > 5)
                         G_max_t_draw_distance--;
                     break;
                 /* [=] Increase parametric draw distance. */
                 case SDLK_EQUALS:
-                    G_max_t_draw_distance++;
+                    if (G_max_t_draw_distance < 100)
+                        G_max_t_draw_distance++;
                     break;
                 /* [1-5] Set pixel resolution */
                 case SDLK_1:
@@ -277,7 +278,7 @@ int main(int argc, char *argv[])
         // Animate, raytrace and push to screen.
         animate_animators(animators);
         raytrace(rgb_image, rt_height, rt_width, camera, root, lights, renderer);
-        SDL_RenderPresent(renderer);    
+        SDL_RenderPresent(renderer);
     }
 
     // On a quit event, shut it all down.

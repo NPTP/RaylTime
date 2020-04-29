@@ -9,6 +9,7 @@ Given a ray and a box, return true if the ray intersects the box
 between min_t and max_t.
 */
 bool ray_intersect_box(
+    const bool &is_from_viewer,
     const Ray &ray,
     const BoundingBox &box,
     const double min_t,

@@ -19,15 +19,14 @@ void raytrace(
             if ((y % 2 == 0 && x % 2 == 1) || (y % 2 == 1 && x % 2 == 0))
                 continue;
 
-            // Set background color
-            Eigen::Vector3d rgb(0, 0, 0);
-
             // Compute viewing ray
             Ray ray;
             viewing_ray(camera, y, x, width, height, ray); // Pixels i,j map to y,x
 
-            // Shoot ray and collect color
-            raycolor(ray, 1.0, root, lights, 0, rgb);
+            // Shoot ray and collect color.
+            Eigen::Vector3d rgb(0, 0, 0);
+            // First argument tells the ray that it is direct from the viewer (not a shading ray)
+            raycolor(true, ray, 1.0, root, lights, 0, rgb);
 
             // Put pixel colors into array
             rgb_image[0 + 3 * (x + width * y)] = (int)(255.0 * clamp(rgb(0)));
