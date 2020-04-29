@@ -5,7 +5,13 @@
 class PointLight : public Light
 {
 public:
+    // 3d location of light
     Eigen::Vector3d p;
+
+    PointLight(double l_radius)
+    {
+        this->light_radius = l_radius;
+    }
 
     /*
     Given a query point return direction toward Light.

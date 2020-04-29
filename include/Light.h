@@ -7,6 +7,10 @@ public:
     // Color (intensities)
     Eigen::Vector3d I;
 
+    // How far the "glow" of this light reaches in circle around 'p'.
+    // Could be infinite.
+    double light_radius;
+
     virtual ~Light(){};
     /* 
     Given a query point q, return direction d toward light.

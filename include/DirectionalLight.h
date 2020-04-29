@@ -12,6 +12,11 @@ public:
     // Direction from light toward scene.
     Eigen::Vector3d light_direction;
 
+    DirectionalLight()
+    {
+        this->light_radius = std::numeric_limits<double>::infinity();
+    }
+
     /* Given a query point return direction toward Light.
     
     IN

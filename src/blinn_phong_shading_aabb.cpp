@@ -13,15 +13,13 @@ Eigen::Vector3d blinn_phong_shading_aabb(
     const std::shared_ptr<AABBTree> &root,
     const std::vector<std::shared_ptr<Light>> &lights)
 {
-    // set ambient light (fullbright if this surface is an AABB visualization or a light "fixture" surface).
+    // Ambient term. Initialize blinn_phong rgb vector.
+    // Set to fullbright (1.0) when this is a light or a bounding box.
     double ambient_ia;
     if (descendant->material->is_light)
         ambient_ia = 1.0;
     else
         ambient_ia = AMBIENT_LIGHT_DEFAULT_VAL;
-
-    // Set up resources for computing shading from light sources. Shading starts with adding the ambient term.
-    // (Ambient term is ignored, set to fullbright (1.0) when showing bounding boxes.)
     Eigen::Vector3d blinn_phong = descendant->material->ka * ambient_ia;
 
     Ray ray_to_light;
@@ -35,6 +33,10 @@ Eigen::Vector3d blinn_phong_shading_aabb(
     {
         // Put the direction toward the light in the (normalized) vector l.
         lights[i]->direction(ray_to_light.origin, l, t_to_light);
+
+        // If the ray-to-light origin is outside of the light's radius, skip this light.
+        if (t_to_light > lights[i]->light_radius)
+            continue;
 
         // Give ray to light the direction to THIS light.
         ray_to_light.direction = l;
@@ -60,8 +62,10 @@ Eigen::Vector3d blinn_phong_shading_aabb(
             else
                 specular = (descendant->material->ks.cwiseProduct(lights[i]->I)) * pow(std::max(0.0, n_dot_h), descendant->material->phong_exponent);
 
-            // Sum Blinn-Phong rgb values.
-            blinn_phong = blinn_phong + lambertian + specular;
+            // Adjust for distance from light radius and sum Blinn-Phong rgb values.
+            double light_scale = (-t_to_light / lights[i]->light_radius) + 1;
+            Eigen::Vector3d light_addition = (lambertian + specular) * light_scale;
+            blinn_phong = blinn_phong + light_addition;
         }
     }
 

@@ -36,6 +36,7 @@ std::default_random_engine re;
 // Level scale constants
 const int LEVEL_HEIGHT = 8;
 const int UNIT_SIZE = 8;
+const double POINT_LIGHT_RADIUS = 5.5 * (double)UNIT_SIZE;
 const std::string FLAT = "FLAT";
 const std::string REFLECTIVE = "REFLECTIVE";
 
@@ -179,7 +180,8 @@ void parse_char(const char &c,
     }
     else if (c == 'L') // INVISIBLE POINT LIGHT
     {
-        std::shared_ptr<PointLight> light(new PointLight());
+        // TODO: give PointLight a constructor that takes position and radius args rather than applying them manually like this
+        std::shared_ptr<PointLight> light(new PointLight(POINT_LIGHT_RADIUS));
         light->p = Eigen::Vector3d(U, V, W);
         light->I = Eigen::Vector3d(0.2 + unif(re) * 0.8, 0.2 + unif(re) * 0.8, 0.2 + unif(re) * 0.8);
         lights.push_back(light);
@@ -312,7 +314,7 @@ std::shared_ptr<Quad> new_light_quad(const char &c, int &u, int &w, Eigen::Vecto
 // Creates a light block slightly protruding from either the 'F'loor or the 'C'eiling.
 void push_new_light_block(std::vector<std::shared_ptr<Object>> &objects, std::vector<std::shared_ptr<Light>> &lights, const char &c, int &u, int &w)
 {
-    std::shared_ptr<PointLight> light(new PointLight());
+    std::shared_ptr<PointLight> light(new PointLight(POINT_LIGHT_RADIUS));
     light->I = Eigen::Vector3d(0.2 + unif(re) * 0.8, 0.2 + unif(re) * 0.8, 0.2 + unif(re) * 0.8);
 
     double light_length = LEVEL_HEIGHT * 0.15;
@@ -400,11 +402,12 @@ void push_new_block(std::vector<std::shared_ptr<Object>> &objects, const char &c
         objects.push_back(quad_top);
     }
 
+    // TODO: Check that all quads have the correct orientation/normals. N&S should, but test all and fix all anyway
     std::tuple<Eigen::Vector3d, Eigen::Vector3d, Eigen::Vector3d> qt_n =
         std::make_tuple(
-            Eigen::Vector3d(u - UNIT_SIZE / 2, 0, w - UNIT_SIZE / 2),
             Eigen::Vector3d(u + UNIT_SIZE / 2, 0, w - UNIT_SIZE / 2),
-            Eigen::Vector3d(u - UNIT_SIZE / 2, block_height, w - UNIT_SIZE / 2));
+            Eigen::Vector3d(u - UNIT_SIZE / 2, 0, w - UNIT_SIZE / 2),
+            Eigen::Vector3d(u + UNIT_SIZE / 2, block_height, w - UNIT_SIZE / 2));
     std::tuple<Eigen::Vector3d, Eigen::Vector3d, Eigen::Vector3d> qt_s =
         std::make_tuple(
             Eigen::Vector3d(u - UNIT_SIZE / 2, 0, w + UNIT_SIZE / 2),

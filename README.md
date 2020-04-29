@@ -4,7 +4,6 @@
 
 ## Ongoing to-dos for this project (This section to be removed on completion)
 
-- Add a light "radius" property (in the `Light` object itself) such that there is a falloff of brightness further from the light. Light objects require radius in constructor. Make that default value in read_level.h cover a radius of 1.5 grid tiles (i.e. covers about 9 tiles altogether when placed in the center). Quite usefully, this also means that we can skip all the intersection checks etc in `blinn_phong_shading_aabb.cpp` when `t_to_light > light.radius` or whatever.
 - UI: show "Show bounding boxes: ON/OFF", "Bounding box tree depth: _/\<max_depth\>", "Raytrace recursion depth: _", and "View distance: \_". Maybe also show level/file name?
 - Have the AABB tree constructor find a "global" maximum depth of the tree, and use this to limit the box vis tree depth and UI should tell you what the limit is.
 - Support collision using the AABB tree (box around camera) (bring back box->intersect(box) code). Set to some value like double the distance to image plane.
@@ -17,6 +16,7 @@ std::ofstream  dst("SDL2.dll",   std::ios::binary);
 dst << src.rdbuf();
 ```
 
+- Moving light source that can be added in the level editor?
 - Eliminate all remaining TODOs and clean up code
 
 #### "Maybe" features or holdovers for RaylTime 2!
@@ -26,6 +26,7 @@ dst << src.rdbuf();
 - Get things on the GPU if possible, increase performance (& default resolution?)
 - In-engine level selector at startup
 - Support triangle soups/STLs
+- Get stuff on the GPU
 
 #### Useful links while working
 
@@ -40,11 +41,11 @@ RAYLTIME is a simple interactive ray tracer built on top of the Eigen liner alge
 
 RAYLTIME uses the following to improve performance:
 
-- Bounding volume hierarchies
+- Bounding volume hierarchies (BVH)
 - Parallel ray processing
 - Phong specular highlights optimization based on [this paper](http://jcgt.org/published/0003/03/01/paper.pdf)
 - Every-other-pixel colour averaging to reduce number of rays cast
-- Runs on the GPU...? (TODO!)
+- Modifiable draw distance (with linear intensity fall-off towards the maximum), past which no rays make BVH tree traversals
 
 ## How to run
 
