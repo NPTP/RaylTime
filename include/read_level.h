@@ -180,7 +180,6 @@ void parse_char(const char &c,
     }
     else if (c == 'L') // INVISIBLE POINT LIGHT
     {
-        // TODO: give PointLight a constructor that takes position and radius args rather than applying them manually like this
         std::shared_ptr<PointLight> light(new PointLight(POINT_LIGHT_RADIUS));
         light->p = Eigen::Vector3d(U, V, W);
         light->I = Eigen::Vector3d(0.2 + unif(re) * 0.8, 0.2 + unif(re) * 0.8, 0.2 + unif(re) * 0.8);

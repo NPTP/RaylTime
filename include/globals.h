@@ -4,6 +4,9 @@
 #include <stdint.h>
 // Global variables for technical settings
 
+/* Height (i.e., max depth) of the AABB tree in the current scene. Used for AABB visualization. */
+extern int G_aabb_tree_height;
+
 /* Flag using bit-flip to activate/deactivate AABB visualization. */
 extern uint8_t G_show_boxes;
 

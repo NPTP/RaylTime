@@ -5,7 +5,6 @@
 ## Ongoing to-dos for this project (This section to be removed on completion)
 
 - UI: show "Show bounding boxes: ON/OFF", "Bounding box tree depth: _/\<max_depth\>", "Raytrace recursion depth: _", and "View distance: \_". Maybe also show level/file name?
-- Have the AABB tree constructor find a "global" maximum depth of the tree, and use this to limit the box vis tree depth and UI should tell you what the limit is.
 - Support collision using the AABB tree (box around camera) (bring back box->intersect(box) code). Set to some value like double the distance to image plane.
 - Move sdl2.dll into the build folder automatically if it's not already there. Use the existing 32/64 env check at the top of main.cpp to know which dll to use. Helpful sample code:
 
@@ -87,6 +86,7 @@ rayltime ../levels/my_level.txt
 - `]` : Increase raytracing reflection recursive depth (max 10)
 - `-` : Decrease draw distance (default 50, min 10)
 - `=` : Increase draw distance (default 50, max 100)
+- `1`-`5` : Change raycasting resolution from 1 (low) to 5 (high). See `set_logical_resolution()` in `main_header.h` for resolution details.
 - `R` : Reload level (will load any changes made to level file; allows for "nearly live" editing)
 
 Additional controls for **maximum exploration**:

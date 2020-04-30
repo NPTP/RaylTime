@@ -22,6 +22,9 @@
 // SDL
 #include <SDL.h>
 
+// Globals
+#include "globals.h"
+
 // Helper function forward implementations
 
 // Pixel/raycast resolution profiles 1-5
@@ -67,12 +70,14 @@ bool read_and_reset_level(int& argc,
     std::shared_ptr<AABBTree>& root,
     std::vector<std::shared_ptr<Animator>>& animators)
 {
+    G_show_boxes_depth = 0;
     if (!read_level(argc <= 1 ? "../levels/defaultlevel.txt" : argv[1], camera, objects, lights))
     {
         std::cerr << "***** ERROR *****\nMalformed level! Closing...\n";
         return false;
     }
     // Build the bounding box tree from the objects provided.
+    G_aabb_tree_height = 0;
     root = std::make_shared<AABBTree>(objects);
 
     // Collect the animators into a separate structure

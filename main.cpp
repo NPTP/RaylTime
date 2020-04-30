@@ -1,5 +1,4 @@
 #include "main_header.h"
-#include "globals.h"
 #ifdef _WIN64
 #define ENV64
 #elif _WIN32
@@ -21,11 +20,17 @@ if (sizeof(void *) == 8)
 #define ROT_ANGLE (M_PI / 96)
 // Default starting raytrace recursion depth
 #define DEFAULT_RAYTRACE_RECURSION_DEPTH 2
+#define MAX_RAYTRACE_RECURSION_DEPTH 10
+// Draw distance constants
+#define DEFAULT_DRAW_DIST 75
+#define MIN_DRAW_DIST 10
+#define MAX_DRAW_DIST 200
 // Global variables for technical settings
+int G_aabb_tree_height = 0;
 uint8_t G_show_boxes = 0x00;
 int G_show_boxes_depth = 0;
 int G_raytrace_recursion_depth = DEFAULT_RAYTRACE_RECURSION_DEPTH;
-int G_max_t_draw_distance = 50;
+int G_max_t_draw_distance = DEFAULT_DRAW_DIST;
 
 /* Main event loop */
 int main(int argc, char *argv[])
@@ -141,12 +146,13 @@ int main(int argc, char *argv[])
                     break;
                 /* [N] Reduce AABB tree visualization depth. */
                 case SDLK_n:
-                    if (G_show_boxes_depth > 0)
+                    if (G_show_boxes && G_show_boxes_depth > 0)
                         G_show_boxes_depth--;
                     break;
                 /* [M] Increase AABB tree visualization depth. */
                 case SDLK_m:
-                    G_show_boxes_depth++;
+                    if (G_show_boxes && G_show_boxes_depth < G_aabb_tree_height)
+                        G_show_boxes_depth++;
                     break;
                 /* [[] Reduce raytracing recursion depth. */
                 case SDLK_LEFTBRACKET:
@@ -155,17 +161,17 @@ int main(int argc, char *argv[])
                     break;
                 /* []] Increase raytracing recursion depth. */
                 case SDLK_RIGHTBRACKET:
-                    if (G_raytrace_recursion_depth < 10)
+                    if (G_raytrace_recursion_depth < MAX_RAYTRACE_RECURSION_DEPTH)
                         G_raytrace_recursion_depth++;
                     break;
                 /* [-] Reduce parametric draw distance. */
                 case SDLK_MINUS:
-                    if (G_max_t_draw_distance > 5)
+                    if (G_max_t_draw_distance > MIN_DRAW_DIST)
                         G_max_t_draw_distance--;
                     break;
                 /* [=] Increase parametric draw distance. */
                 case SDLK_EQUALS:
-                    if (G_max_t_draw_distance < 100)
+                    if (G_max_t_draw_distance < MAX_DRAW_DIST)
                         G_max_t_draw_distance++;
                     break;
                 /* [1-5] Set pixel resolution */
