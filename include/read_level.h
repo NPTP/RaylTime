@@ -204,7 +204,7 @@ void parse_char(const char &c,
     {
         objects.push_back(new_floor_quad(U, W));
         camera.d = 1.0;
-        camera.e = Eigen::Vector3d(U, UNIT_SIZE * 0.4, W);
+        camera.e = Eigen::Vector3d(U, LEVEL_HEIGHT * 0.5, W);
         camera.v = Eigen::Vector3d(0, 1, 0);
         camera.height = 1.0;
         camera.width = 1.7777777778;

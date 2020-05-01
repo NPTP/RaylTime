@@ -11,6 +11,7 @@
 
 // AABBs and AABBTrees
 #include "AABBTree.h"
+#include "collision_detect.h"
 
 // General use
 #include <vector>
@@ -19,7 +20,7 @@
 #include <limits>
 #include <functional>
 
-// SDL
+// SDL 2
 #include <SDL.h>
 
 // Globals
@@ -79,6 +80,14 @@ bool read_and_reset_level(int& argc,
     // Build the bounding box tree from the objects provided.
     G_aabb_tree_height = 0;
     root = std::make_shared<AABBTree>(objects);
+
+    // TODO: clean this up
+    camera.box = BoundingBox(Eigen::RowVector3d(camera.e[0] - 2,
+                                                camera.e[1] - 2,
+                                                camera.e[2] - 2),
+                            Eigen::RowVector3d(camera.e[0] + 2,
+                                                camera.e[1] + 2,
+                                                camera.e[2] + 2));
 
     // Collect the animators into a separate structure
     collect_animators(objects, animators);

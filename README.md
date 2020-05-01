@@ -4,15 +4,18 @@
 
 ## Ongoing to-dos for this project (This section to be removed on completion)
 
+- Support collision using the AABB tree (box around camera). Set to some value like double the distance to image plane.
 - UI: show "Show bounding boxes: ON/OFF", "Bounding box tree depth: _/\<max_depth\>", "Raytrace recursion depth: _", and "View distance: \_". Maybe also show level/file name?
-- Support collision using the AABB tree (box around camera) (bring back box->intersect(box) code). Set to some value like double the distance to image plane.
-- Move sdl2.dll into the build folder automatically if it's not already there. Use the existing 32/64 env check at the top of main.cpp to know which dll to use. Helpful sample code:
+  - Use this repo to set up CMake with SDL2 TTF: https://github.com/aminosbh/sdl2-cmake-modules
+  - Use this video for reference of SDL2 TTF usage in C++: https://www.youtube.com/watch?v=PHaP3wDggnw
+- Move sdl2.dll and sdl2_ttf.dll into the build folder automatically if it's not already there. Use the existing 32/64 env check at the top of main.cpp to know which dll to use. Helpful sample code:
 
 ```
 // Check for and move SDL2.dll if necessary
 std::ifstream  src("../sdl2/lib/x64/SDL2.dll", std::ios::binary);
 std::ofstream  dst("SDL2.dll",   std::ios::binary);
 dst << src.rdbuf();
+// Repeat for sdl2_ttf.dll
 ```
 
 - Moving light source that can be added in the level editor?
@@ -148,5 +151,7 @@ Load up `rayltime`. You will see that `defaultlevel.txt` is loaded by default wh
   - Window
   - Keyboard input
   - No graphics API used other than setting pixel colours based on raycast result.
+- **FINDSDL2TTF** (Cmake module)
+  - Used to link SDL2 ttf library, as CMake find_package currently only supports SDL1 by default. On BSD license: see Copyright.txt for details.
 - **OpenMP** (Multithreading)
   - Casting rays in parallel
