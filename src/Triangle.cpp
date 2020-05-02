@@ -1,6 +1,12 @@
 #include "Triangle.h"
 #include "Ray.h"
 #include <Eigen/Geometry>
+#include "box_intersect_box.h"
+
+bool Triangle::collide(BoundingBox &external_box)
+{
+    return box_intersect_box(external_box, this->box);
+}
 
 bool Triangle::intersect(
     const bool &is_from_viewer,

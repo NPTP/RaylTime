@@ -56,6 +56,12 @@ public:
         double &t,
         Eigen::Vector3d &n,
         std::shared_ptr<Object> &descendant) override;
+
+    /*
+    Given the bounding box of some external object, go through tree and find
+    if it collides with the box of a primitive at the leaf of the tree.
+    */
+    bool collide(BoundingBox &external_box);
 };
 
 #endif

@@ -5,7 +5,7 @@
 #include "AABBTree.h"
 
 bool collision_detect(
-    const BoundingBox& viewbox,
-    std::shared_ptr<AABBTree>& root);
+    BoundingBox &viewbox,
+    std::shared_ptr<AABBTree> &root);
 
 #endif

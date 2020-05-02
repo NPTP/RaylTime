@@ -1,5 +1,4 @@
 #include "AABBTree.h"
-#include "Sphere.h"
 #include "globals.h"
 
 bool AABBTree::intersect(

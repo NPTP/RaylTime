@@ -28,6 +28,8 @@
 
 // Helper function forward implementations
 
+#define VIEWER_HITBOX_SIZE 4 // Keep this divisible by 2.
+
 // Pixel/raycast resolution profiles 1-5
 void set_logical_resolution(int *&rgb_image, SDL_Renderer*& renderer, int& w, int& h, const char& c)
 {
@@ -81,17 +83,38 @@ bool read_and_reset_level(int& argc,
     G_aabb_tree_height = 0;
     root = std::make_shared<AABBTree>(objects);
 
-    // TODO: clean this up
-    camera.box = BoundingBox(Eigen::RowVector3d(camera.e[0] - 2,
-                                                camera.e[1] - 2,
-                                                camera.e[2] - 2),
-                            Eigen::RowVector3d(camera.e[0] + 2,
-                                                camera.e[1] + 2,
-                                                camera.e[2] + 2));
+    // Construct the viewer's hitbox
+    camera.box = BoundingBox(Eigen::RowVector3d(camera.e[0] - VIEWER_HITBOX_SIZE / 2,
+                                                camera.e[1] - VIEWER_HITBOX_SIZE / 2,
+                                                camera.e[2] - VIEWER_HITBOX_SIZE / 2),
+                             Eigen::RowVector3d(camera.e[0] + VIEWER_HITBOX_SIZE / 2,
+                                                camera.e[1] + VIEWER_HITBOX_SIZE / 2,
+                                                camera.e[2] + VIEWER_HITBOX_SIZE / 2));
 
     // Collect the animators into a separate structure
     collect_animators(objects, animators);
     return true;
+}
+
+void move_camera(Camera &camera, const std::string &direction, double distance)
+{
+    Eigen::Vector3d movement;
+    if (direction == "forward")
+        movement = -camera.w * distance;
+    else if (direction == "backward")
+        movement = camera.w * distance;
+    else if (direction == "right")
+        movement = camera.u * distance;
+    else if (direction == "left")
+        movement = -camera.u * distance;
+    else if (direction == "down")
+        movement = -camera.v * distance;
+    else if (direction == "up")
+        movement = camera.v * distance;
+
+    camera.e += movement;
+    camera.box.min_corner += movement;
+    camera.box.max_corner += movement;
 }
 
 void animate_animators(std::vector<std::shared_ptr<Animator>>& animators)

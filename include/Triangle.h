@@ -41,6 +41,12 @@ public:
         double &t,
         Eigen::Vector3d &n,
         std::shared_ptr<Object> &descendant);
+
+    /*
+    Given the bounding box of some external object, check if it collides with this triangle
+    (by checking if it intersects with its own bounding box).
+    */
+    bool collide(BoundingBox &external_box);
 };
 
 #endif

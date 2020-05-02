@@ -269,40 +269,47 @@ int main(int argc, char *argv[])
 
         // Colliding movements
         Eigen::Vector3d initial_pos = camera.e;
+        Eigen::Vector3d min_corner = camera.box.min_corner;
+        Eigen::Vector3d max_corner = camera.box.max_corner;
         if (moving_forward)
         {
-            camera.e -= camera.w * STEP_DISTANCE;
+            move_camera(camera, "forward", STEP_DISTANCE);
             check_collision = true;
         }
         else if (moving_backward)
         {
-            camera.e += camera.w * STEP_DISTANCE;
+            move_camera(camera, "backward", STEP_DISTANCE);
             check_collision = true;
         }
         if (moving_right)
         {
-            camera.e += camera.u * STEP_DISTANCE;
+            move_camera(camera, "right", STEP_DISTANCE);
             check_collision = true;
         }
         else if (moving_left)
         {
-            camera.e -= camera.u * STEP_DISTANCE;
+            move_camera(camera, "left", STEP_DISTANCE);
             check_collision = true;
         }
         if (moving_down)
         {
-            camera.e -= camera.v * STEP_DISTANCE;
+            move_camera(camera, "down", STEP_DISTANCE);
             check_collision = true;
         }
         else if (moving_up)
         {
-            camera.e += camera.v * STEP_DISTANCE;
+            move_camera(camera, "up", STEP_DISTANCE);
             check_collision = true;
         }
 
-        // TODO: clean this up, implement
+        // Short-circuit evaluation allows us to skip collision detection cost
+        // when no viewer movements have been made.
         if (check_collision && collision_detect(camera.box, root))
+        {
             camera.e = initial_pos;
+            camera.box.min_corner = min_corner;
+            camera.box.max_corner = max_corner;
+        }
 
         check_collision = false;
 
