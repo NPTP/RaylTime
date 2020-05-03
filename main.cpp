@@ -62,17 +62,19 @@ int main(int argc, char *argv[])
     bool quit = false;
     bool turning_left = false;
     bool turning_right = false;
-    bool moving_forward = false;
-    bool moving_backward = false;
-    bool moving_left = false;
-    bool moving_right = false;
     bool pitching_up = false;
     bool pitching_down = false;
     bool rolling_left = false;
     bool rolling_right = false;
-    bool moving_up = false;
-    bool moving_down = false;
-    bool check_collision = false;
+// Least significant bit to most significant:
+//  Fwd, back, left, right, up, down
+#define FORWARD 0x01
+#define BACKWARD 0x02
+#define LEFT 0x04
+#define RIGHT 0x08
+#define UP 0x10
+#define DOWN 0x20
+    uint8_t movement_flags = 0x00;
 
     while (!quit)
     {
@@ -113,28 +115,28 @@ int main(int argc, char *argv[])
                     break;
                     /* [W] Move forward */
                 case SDLK_w:
-                    moving_forward = true;
+                    movement_flags = movement_flags | FORWARD;
                     break;
                     /* [S] Move backward */
                 case SDLK_s:
-                    moving_backward = true;
+                    movement_flags = movement_flags | BACKWARD;
                     break;
                     /* [A] Step left */
                 case SDLK_a:
-                    moving_left = true;
+                    movement_flags = movement_flags | LEFT;
                     break;
                     /* [D] Step right */
                 case SDLK_d:
-                    moving_right = true;
+                    movement_flags = movement_flags | RIGHT;
+                    break;
+                    /* [SPACE] Move upwards */
+                case SDLK_SPACE:
+                    movement_flags = movement_flags | UP;
                     break;
                     /* [CTRL] Move downwards */
                 case SDLK_RCTRL:
                 case SDLK_LCTRL:
-                    moving_down = true;
-                    break;
-                    /* [SPACE] Move upwards */
-                case SDLK_SPACE:
-                    moving_up = true;
+                    movement_flags = movement_flags | DOWN;
                     break;
                     /* [R] Re-load level/scene (allows changes) */
                 case SDLK_r:
@@ -200,23 +202,30 @@ int main(int argc, char *argv[])
             case SDL_KEYUP:
                 switch (event.key.keysym.sym)
                 {
+                case SDLK_w:
+                    movement_flags = movement_flags & ~(0x01 << 0);
+                    break;
+                case SDLK_s:
+                    movement_flags = movement_flags & ~(0x01 << 1);
+                    break;
+                case SDLK_a:
+                    movement_flags = movement_flags & ~(0x01 << 2);
+                    break;
+                case SDLK_d:
+                    movement_flags = movement_flags & ~(0x01 << 3);
+                    break;
+                case SDLK_SPACE:
+                    movement_flags = movement_flags & ~(0x01 << 4);
+                    break;
+                case SDLK_RCTRL:
+                case SDLK_LCTRL:
+                    movement_flags = movement_flags & ~(0x01 << 5);
+                    break;
                 case SDLK_LEFT:
                     turning_left = false;
                     break;
                 case SDLK_RIGHT:
                     turning_right = false;
-                    break;
-                case SDLK_w:
-                    moving_forward = false;
-                    break;
-                case SDLK_s:
-                    moving_backward = false;
-                    break;
-                case SDLK_a:
-                    moving_left = false;
-                    break;
-                case SDLK_d:
-                    moving_right = false;
                     break;
                 case SDLK_UP:
                     pitching_down = false;
@@ -229,13 +238,6 @@ int main(int argc, char *argv[])
                     break;
                 case SDLK_e:
                     rolling_right = false;
-                    break;
-                case SDLK_RCTRL:
-                case SDLK_LCTRL:
-                    moving_down = false;
-                    break;
-                case SDLK_SPACE:
-                    moving_up = false;
                     break;
                 default:
                     break;
@@ -267,51 +269,9 @@ int main(int argc, char *argv[])
         else if (rolling_right)
             change_roll(camera, -ROT_ANGLE);
 
-        // Colliding movements
-        Eigen::Vector3d initial_pos = camera.e;
-        Eigen::Vector3d min_corner = camera.box.min_corner;
-        Eigen::Vector3d max_corner = camera.box.max_corner;
-        if (moving_forward)
-        {
-            move_camera(camera, "forward", STEP_DISTANCE);
-            check_collision = true;
-        }
-        else if (moving_backward)
-        {
-            move_camera(camera, "backward", STEP_DISTANCE);
-            check_collision = true;
-        }
-        if (moving_right)
-        {
-            move_camera(camera, "right", STEP_DISTANCE);
-            check_collision = true;
-        }
-        else if (moving_left)
-        {
-            move_camera(camera, "left", STEP_DISTANCE);
-            check_collision = true;
-        }
-        if (moving_down)
-        {
-            move_camera(camera, "down", STEP_DISTANCE);
-            check_collision = true;
-        }
-        else if (moving_up)
-        {
-            move_camera(camera, "up", STEP_DISTANCE);
-            check_collision = true;
-        }
-
-        // Short-circuit evaluation allows us to skip collision detection cost
-        // when no viewer movements have been made.
-        if (check_collision && collision_detect(camera.box, root))
-        {
-            camera.e = initial_pos;
-            camera.box.min_corner = min_corner;
-            camera.box.max_corner = max_corner;
-        }
-
-        check_collision = false;
+        // Handle colliding movements
+        if (movement_flags)
+            move_camera(camera, root, movement_flags, STEP_DISTANCE);
 
         // Animate, raytrace and push to screen.
         animate_animators(animators);

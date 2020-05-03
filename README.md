@@ -4,7 +4,6 @@
 
 ## Ongoing to-dos for this project (This section to be removed on completion)
 
-- Refactor movement code so that instead of calling move_camera multiple times, we set bit flags and call move_camera once for all types of movement in one frame.
 - UI: show "Show bounding boxes: ON/OFF", "Bounding box tree depth: _/\<max_depth\>", "Raytrace recursion depth: _", and "View distance: \_". Maybe also show level/file name?
   - Use this repo to set up CMake with SDL2 TTF: https://github.com/aminosbh/sdl2-cmake-modules
   - Use this video for reference of SDL2 TTF usage in C++: https://www.youtube.com/watch?v=PHaP3wDggnw

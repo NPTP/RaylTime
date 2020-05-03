@@ -28,7 +28,14 @@
 
 // Helper function forward implementations
 
+// Movement
 #define VIEWER_HITBOX_SIZE 4 // Keep this divisible by 2.
+#define FORWARD 0x01
+#define BACKWARD 0x02
+#define LEFT 0x04
+#define RIGHT 0x08
+#define UP 0x10
+#define DOWN 0x20
 
 // Pixel/raycast resolution profiles 1-5
 void set_logical_resolution(int *&rgb_image, SDL_Renderer*& renderer, int& w, int& h, const char& c)
@@ -96,25 +103,38 @@ bool read_and_reset_level(int& argc,
     return true;
 }
 
-void move_camera(Camera &camera, const std::string &direction, double distance)
+void move_camera(Camera &camera, std::shared_ptr<AABBTree>& root, uint8_t &movement_flags, double distance)
 {
-    Eigen::Vector3d movement;
-    if (direction == "forward")
-        movement = -camera.w * distance;
-    else if (direction == "backward")
-        movement = camera.w * distance;
-    else if (direction == "right")
-        movement = camera.u * distance;
-    else if (direction == "left")
-        movement = -camera.u * distance;
-    else if (direction == "down")
-        movement = -camera.v * distance;
-    else if (direction == "up")
-        movement = camera.v * distance;
+    Eigen::Vector3d initial_pos = camera.e;
+    Eigen::Vector3d min_corner = camera.box.min_corner;
+    Eigen::Vector3d max_corner = camera.box.max_corner;
+    Eigen::Vector3d movement(0,0,0);
+
+    if (movement_flags & FORWARD)
+        movement += -camera.w * distance;
+    else if (movement_flags & BACKWARD)
+        movement += camera.w * distance;
+
+    if (movement_flags & RIGHT)
+        movement += camera.u * distance;
+    else if (movement_flags & LEFT)
+        movement += -camera.u * distance;
+    
+    if (movement_flags & UP)
+        movement += camera.v * distance;
+    else if (movement_flags & DOWN)
+        movement += -camera.v * distance;
 
     camera.e += movement;
     camera.box.min_corner += movement;
     camera.box.max_corner += movement;
+
+    if (collision_detect(camera.box, root))
+    {
+        camera.e = initial_pos;
+        camera.box.min_corner = min_corner;
+        camera.box.max_corner = max_corner;
+    }
 }
 
 void animate_animators(std::vector<std::shared_ptr<Animator>>& animators)
