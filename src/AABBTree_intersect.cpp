@@ -1,5 +1,4 @@
 #include "AABBTree.h"
-#include "Sphere.h"
 #include "globals.h"
 
 bool AABBTree::intersect(
@@ -32,7 +31,7 @@ bool AABBTree::intersect(
     Eigen::Vector3d right_n;
     std::shared_ptr<Object> left_descendant, right_descendant;
 
-    // TODO: delete commented lines if new version works.
+    // TODO: (Leave until end) delete commented lines if new version works.
     // Use these casts to test if children are AABBTrees, or if they are primitives.
     // std::shared_ptr<AABBTree> left_is_aabb = std::dynamic_pointer_cast<AABBTree>(this->left);
     // std::shared_ptr<AABBTree> right_is_aabb = std::dynamic_pointer_cast<AABBTree>(this->right);

@@ -1,7 +1,12 @@
 #include "Quad.h"
 #include "Ray.h"
+#include "box_intersect_box.h"
 #include <Eigen/Geometry>
-#include <iostream>
+
+bool Quad::collide(BoundingBox &external_box)
+{
+    return box_intersect_box(external_box, this->box);
+}
 
 bool Quad::intersect(
     const bool &is_from_viewer,

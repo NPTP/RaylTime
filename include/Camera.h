@@ -21,6 +21,9 @@ struct Camera
 
     // Width and height of image plane
     double width, height;
+
+    // Collision box for camera
+    BoundingBox box;
 };
 
 #endif

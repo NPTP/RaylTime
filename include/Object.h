@@ -29,6 +29,8 @@ public:
         Eigen::Vector3d &n,
         std::shared_ptr<Object> &descendant) = 0; // = 0 ensures function is defined (as no-op)
 
+    virtual bool collide(BoundingBox &external_box) = 0;
+
     BoundingBox box;
 };
 

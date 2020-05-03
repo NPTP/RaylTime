@@ -62,16 +62,19 @@ int main(int argc, char *argv[])
     bool quit = false;
     bool turning_left = false;
     bool turning_right = false;
-    bool moving_forward = false;
-    bool moving_backward = false;
-    bool moving_left = false;
-    bool moving_right = false;
     bool pitching_up = false;
     bool pitching_down = false;
     bool rolling_left = false;
     bool rolling_right = false;
-    bool moving_up = false;
-    bool moving_down = false;
+// Least significant bit to most significant:
+//  Fwd, back, left, right, up, down
+#define FORWARD 0x01
+#define BACKWARD 0x02
+#define LEFT 0x04
+#define RIGHT 0x08
+#define UP 0x10
+#define DOWN 0x20
+    uint8_t movement_flags = 0x00;
 
     while (!quit)
     {
@@ -82,99 +85,99 @@ int main(int argc, char *argv[])
             case SDL_KEYDOWN:
                 switch (event.key.keysym.sym)
                 {
-                /* [ESC] Quit */
+                    /* [ESC] Quit */
                 case SDLK_ESCAPE:
                     quit = true;
                     break;
-                /* [UP ARROW] Pitch down */
+                    /* [UP ARROW] Pitch down */
                 case SDLK_UP:
                     pitching_down = true;
                     break;
-                /* [DOWN ARROW] Pitch up */
+                    /* [DOWN ARROW] Pitch up */
                 case SDLK_DOWN:
                     pitching_up = true;
                     break;
-                /* [LEFT ARROW] Yaw left */
+                    /* [LEFT ARROW] Yaw left */
                 case SDLK_LEFT:
                     turning_left = true;
                     break;
-                /* [RIGHT ARROW] Yaw right*/
+                    /* [RIGHT ARROW] Yaw right*/
                 case SDLK_RIGHT:
                     turning_right = true;
                     break;
-                /* [Q] Roll CCW */
+                    /* [Q] Roll CCW */
                 case SDLK_q:
                     rolling_left = true;
                     break;
-                /* [E] Roll CW */
+                    /* [E] Roll CW */
                 case SDLK_e:
                     rolling_right = true;
                     break;
-                /* [W] Move forward */
+                    /* [W] Move forward */
                 case SDLK_w:
-                    moving_forward = true;
+                    movement_flags = movement_flags | FORWARD;
                     break;
-                /* [S] Move backward */
+                    /* [S] Move backward */
                 case SDLK_s:
-                    moving_backward = true;
+                    movement_flags = movement_flags | BACKWARD;
                     break;
-                /* [A] Step left */
+                    /* [A] Step left */
                 case SDLK_a:
-                    moving_left = true;
+                    movement_flags = movement_flags | LEFT;
                     break;
-                /* [D] Step right */
+                    /* [D] Step right */
                 case SDLK_d:
-                    moving_right = true;
+                    movement_flags = movement_flags | RIGHT;
                     break;
-                /* [CTRL] Move downwards */
+                    /* [SPACE] Move upwards */
+                case SDLK_SPACE:
+                    movement_flags = movement_flags | UP;
+                    break;
+                    /* [CTRL] Move downwards */
                 case SDLK_RCTRL:
                 case SDLK_LCTRL:
-                    moving_down = true;
+                    movement_flags = movement_flags | DOWN;
                     break;
-                /* [SPACE] Move upwards */
-                case SDLK_SPACE:
-                    moving_up = true;
-                    break;
-                /* [R] Re-load level/scene (allows changes) */
+                    /* [R] Re-load level/scene (allows changes) */
                 case SDLK_r:
                     if (!read_and_reset_level(argc, argv, camera, objects, lights, root, animators))
                         return -1;
                     break;
-                /* [B] Visualize bounding boxes around objects in scene. */
+                    /* [B] Visualize bounding boxes around objects in scene. */
                 case SDLK_b:
                     G_show_boxes = G_show_boxes ^ 0x01;
                     break;
-                /* [N] Reduce AABB tree visualization depth. */
+                    /* [N] Reduce AABB tree visualization depth. */
                 case SDLK_n:
                     if (G_show_boxes && G_show_boxes_depth > 0)
                         G_show_boxes_depth--;
                     break;
-                /* [M] Increase AABB tree visualization depth. */
+                    /* [M] Increase AABB tree visualization depth. */
                 case SDLK_m:
                     if (G_show_boxes && G_show_boxes_depth < G_aabb_tree_height)
                         G_show_boxes_depth++;
                     break;
-                /* [[] Reduce raytracing recursion depth. */
+                    /* [[] Reduce raytracing recursion depth. */
                 case SDLK_LEFTBRACKET:
                     if (G_raytrace_recursion_depth > 0)
                         G_raytrace_recursion_depth--;
                     break;
-                /* []] Increase raytracing recursion depth. */
+                    /* []] Increase raytracing recursion depth. */
                 case SDLK_RIGHTBRACKET:
                     if (G_raytrace_recursion_depth < MAX_RAYTRACE_RECURSION_DEPTH)
                         G_raytrace_recursion_depth++;
                     break;
-                /* [-] Reduce parametric draw distance. */
+                    /* [-] Reduce parametric draw distance. */
                 case SDLK_MINUS:
                     if (G_max_t_draw_distance > MIN_DRAW_DIST)
                         G_max_t_draw_distance--;
                     break;
-                /* [=] Increase parametric draw distance. */
+                    /* [=] Increase parametric draw distance. */
                 case SDLK_EQUALS:
                     if (G_max_t_draw_distance < MAX_DRAW_DIST)
                         G_max_t_draw_distance++;
                     break;
-                /* [1-5] Set pixel resolution */
+                    /* [1-5] Set pixel resolution */
                 case SDLK_1:
                     set_logical_resolution(rgb_image, renderer, rt_width, rt_height, '1');
                     break;
@@ -195,27 +198,34 @@ int main(int argc, char *argv[])
                 }
                 break;
 
-            // Key releases
+                // Key releases
             case SDL_KEYUP:
                 switch (event.key.keysym.sym)
                 {
+                case SDLK_w:
+                    movement_flags = movement_flags & ~(0x01 << 0);
+                    break;
+                case SDLK_s:
+                    movement_flags = movement_flags & ~(0x01 << 1);
+                    break;
+                case SDLK_a:
+                    movement_flags = movement_flags & ~(0x01 << 2);
+                    break;
+                case SDLK_d:
+                    movement_flags = movement_flags & ~(0x01 << 3);
+                    break;
+                case SDLK_SPACE:
+                    movement_flags = movement_flags & ~(0x01 << 4);
+                    break;
+                case SDLK_RCTRL:
+                case SDLK_LCTRL:
+                    movement_flags = movement_flags & ~(0x01 << 5);
+                    break;
                 case SDLK_LEFT:
                     turning_left = false;
                     break;
                 case SDLK_RIGHT:
                     turning_right = false;
-                    break;
-                case SDLK_w:
-                    moving_forward = false;
-                    break;
-                case SDLK_s:
-                    moving_backward = false;
-                    break;
-                case SDLK_a:
-                    moving_left = false;
-                    break;
-                case SDLK_d:
-                    moving_right = false;
                     break;
                 case SDLK_UP:
                     pitching_down = false;
@@ -228,13 +238,6 @@ int main(int argc, char *argv[])
                     break;
                 case SDLK_e:
                     rolling_right = false;
-                    break;
-                case SDLK_RCTRL:
-                case SDLK_LCTRL:
-                    moving_down = false;
-                    break;
-                case SDLK_SPACE:
-                    moving_up = false;
                     break;
                 default:
                     break;
@@ -251,35 +254,24 @@ int main(int argc, char *argv[])
         }
 
         // Actual movement branches
+
+        // Non-colliding movements
         if (turning_left)
             change_yaw(camera, ROT_ANGLE);
         else if (turning_right)
             change_yaw(camera, -ROT_ANGLE);
-
-        if (moving_forward)
-            camera.e -= camera.w * STEP_DISTANCE;
-        else if (moving_backward)
-            camera.e += camera.w * STEP_DISTANCE;
-
-        if (moving_right)
-            camera.e += camera.u * STEP_DISTANCE;
-        else if (moving_left)
-            camera.e -= camera.u * STEP_DISTANCE;
-
         if (pitching_down)
             change_pitch(camera, -ROT_ANGLE);
         else if (pitching_up)
             change_pitch(camera, ROT_ANGLE);
-
         if (rolling_left)
             change_roll(camera, ROT_ANGLE);
         else if (rolling_right)
             change_roll(camera, -ROT_ANGLE);
 
-        if (moving_down)
-            camera.e -= camera.v * STEP_DISTANCE;
-        else if (moving_up)
-            camera.e += camera.v * STEP_DISTANCE;
+        // Handle colliding movements
+        if (movement_flags)
+            move_camera(camera, root, movement_flags, STEP_DISTANCE);
 
         // Animate, raytrace and push to screen.
         animate_animators(animators);

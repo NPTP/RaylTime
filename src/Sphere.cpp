@@ -1,7 +1,12 @@
 #include "Sphere.h"
 #include "Ray.h"
 #include <cmath>
-#include "ray_intersect_box.h"
+#include "box_intersect_box.h"
+
+bool Sphere::collide(BoundingBox &external_box)
+{
+    return box_intersect_box(external_box, this->box);
+}
 
 bool Sphere::intersect(
     const bool &is_from_viewer,
