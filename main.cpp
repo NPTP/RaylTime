@@ -13,6 +13,7 @@ if (sizeof(void *) == 8)
 #endif
 
 //Screen dimension constants (not pixel resolution)
+#define WINDOW_TITLE "RaylTime 1.0"
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
 // Movement constants
@@ -48,12 +49,18 @@ int main(int argc, char *argv[])
     SDL_Window *window;
     SDL_Renderer *renderer;
     SDL_Init(SDL_INIT_VIDEO);
+    TTF_Init();
     SDL_CreateWindowAndRenderer(
         WINDOW_WIDTH,
         WINDOW_HEIGHT,
         0, // SDL_WINDOW_RESIZABLE || SDL_WINDOW_INPUT_GRABBED,
         &window,
         &renderer);
+    SDL_SetWindowTitle(window, WINDOW_TITLE);
+    TTF_Font* font = TTF_OpenFont("../sdl2_ttf/font01.ttf", 20);
+    SDL_Color text_color = { 255, 255, 255 };
+    SDL_Surface* surface;
+    SDL_Texture* texture;
     int rt_width, rt_height;
     int *rgb_image = new int[1]; // Initialize so rgb_image doesn't point at anything important
     set_logical_resolution(rgb_image, renderer, rt_width, rt_height, '3');
@@ -66,15 +73,17 @@ int main(int argc, char *argv[])
     bool pitching_down = false;
     bool rolling_left = false;
     bool rolling_right = false;
+    uint8_t show_ui = 0x01;
 // Least significant bit to most significant:
 //  Fwd, back, left, right, up, down
+    uint8_t movement_flags = 0x00;
 #define FORWARD 0x01
 #define BACKWARD 0x02
 #define LEFT 0x04
 #define RIGHT 0x08
 #define UP 0x10
 #define DOWN 0x20
-    uint8_t movement_flags = 0x00;
+
 
     while (!quit)
     {
@@ -88,6 +97,9 @@ int main(int argc, char *argv[])
                     /* [ESC] Quit */
                 case SDLK_ESCAPE:
                     quit = true;
+                    break;
+                case SDLK_u:
+                    show_ui = show_ui ^ 0x01;
                     break;
                     /* [UP ARROW] Pitch down */
                 case SDLK_UP:
@@ -276,12 +288,33 @@ int main(int argc, char *argv[])
         // Animate, raytrace and push to screen.
         animate_animators(animators);
         raytrace(rgb_image, rt_height, rt_width, camera, root, lights, renderer);
+
+        // Render UI text.
+        if (show_ui)
+        {
+            std::string box_on_off = G_show_boxes ? "ON" : "OFF";
+            std::stringstream ui_text;
+            ui_text << "Show bounding boxes: " << box_on_off << " || " <<
+                "Bounding box tree depth: " << G_show_boxes_depth << " of " << G_aabb_tree_height << " || " <<
+                "Raytrace recursion depth: " << G_raytrace_recursion_depth << " || " <<
+                "Draw distance: " << G_max_t_draw_distance;
+            surface = TTF_RenderText_Solid(font, ui_text.str().c_str(), text_color);
+            texture = SDL_CreateTextureFromSurface(renderer, surface);
+            SDL_FreeSurface(surface);
+            SDL_Rect dstrect = { 0, 0, rt_width * 0.6, rt_height * 0.05 };
+            SDL_RenderCopy(renderer, texture, NULL, &dstrect);
+        }
+
+        // Push all to rendered window.
         SDL_RenderPresent(renderer);
     }
 
     // On a quit event, shut it all down.
+    SDL_DestroyTexture(texture);
+    TTF_CloseFont(font);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    TTF_Quit();
     SDL_Quit();
 
     return 0;

@@ -5,8 +5,11 @@ x64-Debug/
 x64-Release/
 CMakeSettings.json
 
-# Handy SDL2.dll at the ready, but out of place
+# Handy SDL2 dll files at the ready, but out of place
 SDL2.dll
+SDL2_ttf.dll
+libfreetype-6.dll
+zlib1.dll
 
 # Compiled Object files
 *.slo

@@ -20,8 +20,10 @@
 #include <limits>
 #include <functional>
 
-// SDL 2
+// SDL 2 & TTF
 #include <SDL.h>
+#include <SDL_ttf.h>
+#include <sstream>
 
 // Globals
 #include "globals.h"
