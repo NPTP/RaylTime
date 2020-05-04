@@ -152,7 +152,10 @@ Load up `rayltime`. You will see that `defaultlevel.txt` is loaded by default wh
   - Window
   - Keyboard input
   - No graphics API used other than setting pixel colours based on raycast result.
-- **FINDSDL2TTF** (Cmake module)
-  - Used to link SDL2 ttf library, as CMake find_package currently only supports SDL1 by default. On BSD license: see Copyright.txt for details.
+- **FINDSDL2_ttf** (Cmake module)
+  - Used to link SDL2 ttf library for text UI in SDL window.
+    - Required as CMake find_package() currently only supports SDL1.
+    - Found at [this repo](https://github.com/aminosbh/sdl2-cmake-modules).
+    - This CMake module is distributed under the OSI-approved BSD 3-Clause License. See SDL2_ttf_Copyright.txt for details.
 - **OpenMP** (Multithreading)
   - Casting rays in parallel
