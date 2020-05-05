@@ -17,7 +17,7 @@
 
 ---
 
-RAYLTIME is a simple interactive ray tracer built on top of the Eigen liner algebra library (no RTX). It allows you to move around raytraced scenes in real-time. It runs in a much lower resolution than other simple (usually offline) raytracers for useable performance, along with other optimizations. It features a text-based "level editing" system allowing you to quickly make new scenes to move around in.
+RAYLTIME is a simple interactive ray tracer running on the CPU and built on top of the Eigen linear algebra library. It allows you to move around raytraced scenes in real-time. It runs in a much lower resolution than other simple (usually offline) raytracers for useable performance, along with other optimizations. It features a text-based "level editing" system allowing you to quickly make new scenes to move around in.
 
 RAYLTIME uses the following to improve performance:
 
@@ -36,7 +36,7 @@ cmake -DCMAKE_BUILD_TYPE=Release ..
 ```
 
 After building, ensure the required DLL files exist inside your build folder with the executable _or it won't run!_
-They can be found in the folders `Required DLLs x64` and `Required DLLs x86` as necessary. Just copy them into your build folder.
+They can be found in the folders `Required DLLs x64` or `Required DLLs x86`, whichever is necessary for your system. Just copy them into your build folder.
 
 Run `rayltime` and it will start with `defaultlevel.txt` as the default level. Other sample levels have also been provided in `levels/`. Load any level providing the level file path to `rayltime`, e.g. :
 
@@ -50,16 +50,16 @@ rayltime ../levels/my_level.txt
 >
 > - CMake 3.9 or higher is required. You may need to change the way targets are handled in CMakeLists.txt for non-Windows platforms.
 > - C++11 compatible compiler is required.
-> - OpenMP support is required.
+> - OpenMP support is required for improved performance.
 
 ### Controls
 
 - `Esc` : Quit
 - `U` : Toggle UI text
 - `W` : Move forward
-- `A` : Slide left
 - `S` : Move backward
-- `D` : Slide right
+- `A` : Move left
+- `D` : Move right
 - `LEFT ARROW` : Turn left
 - `RIGHT ARROW` : Turn right
 - `B` : Toggle bounding box visualization
@@ -130,7 +130,7 @@ Load up `rayltime`. You will see that `defaultlevel.txt` is loaded by default wh
 - **[SDL](https://www.libsdl.org/)** (Simple DirectMedia Layer)
   - Window
   - Keyboard input
-  - No graphics API used other than setting pixel colours based on raycast result.
+  - No graphics API used other than setting pixel colours based on raytrace result for that pixel.
 - **FINDSDL2_ttf** (Cmake module)
   - Used to link SDL2 ttf library for text UI in SDL window.
     - Required as CMake find_package() currently only supports SDL1.
