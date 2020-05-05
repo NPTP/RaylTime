@@ -1,3 +1,16 @@
+#ifdef _WIN64
+#define ENV64
+#elif _WIN32
+#define ENV32
+#else
+if (sizeof(void *) == 8)
+#define ENV64
+    else if (sizeof(void *) == 4)
+#define ENV32
+        else
+#error "ENV NOT DEFINED (32 OR 64 BIT)"
+#endif
+
 // Ray tracing
 #include "Camera.h"
 #include "Object.h"
@@ -20,8 +33,10 @@
 #include <limits>
 #include <functional>
 
-// SDL 2
+// SDL 2 & TTF
 #include <SDL.h>
+#include <SDL_ttf.h>
+#include <sstream>
 
 // Globals
 #include "globals.h"
@@ -38,27 +53,44 @@
 #define DOWN 0x20
 
 // Pixel/raycast resolution profiles 1-5
-void set_logical_resolution(int *&rgb_image, SDL_Renderer*& renderer, int& w, int& h, const char& c)
+void set_logical_resolution(int *&rgb_image, SDL_Renderer *&renderer, int &w, int &h, const char &c)
 {
     switch (c)
     {
-    case '1': w = 80;   h = 45;  break;
-    case '2': w = 120;  h = 67;  break;
-    case '3': w = 160;  h = 90;  break;
-    case '4': w = 240;  h = 135; break;
-    case '5': w = 320;  h = 180; break;
-    default:  w = 160;  h = 90;
+    case '1':
+        w = 80;
+        h = 45;
+        break;
+    case '2':
+        w = 120;
+        h = 67;
+        break;
+    case '3':
+        w = 160;
+        h = 90;
+        break;
+    case '4':
+        w = 240;
+        h = 135;
+        break;
+    case '5':
+        w = 320;
+        h = 180;
+        break;
+    default:
+        w = 160;
+        h = 90;
     }
 
-    int* trash = rgb_image;
+    int *trash = rgb_image;
     rgb_image = new int[3 * w * h];
     delete[] trash;
 
     SDL_RenderSetLogicalSize(renderer, w, h);
 }
 
-void collect_animators(std::vector<std::shared_ptr<Object>>& objects,
-    std::vector<std::shared_ptr<Animator>>& animators)
+void collect_animators(std::vector<std::shared_ptr<Object>> &objects,
+                       std::vector<std::shared_ptr<Animator>> &animators)
 {
     animators.clear();
     animators.shrink_to_fit();
@@ -72,13 +104,13 @@ void collect_animators(std::vector<std::shared_ptr<Object>>& objects,
     }
 }
 
-bool read_and_reset_level(int& argc,
-    char* argv[],
-    Camera& camera,
-    std::vector<std::shared_ptr<Object>>& objects,
-    std::vector<std::shared_ptr<Light>>& lights,
-    std::shared_ptr<AABBTree>& root,
-    std::vector<std::shared_ptr<Animator>>& animators)
+bool read_and_reset_level(int &argc,
+                          char *argv[],
+                          Camera &camera,
+                          std::vector<std::shared_ptr<Object>> &objects,
+                          std::vector<std::shared_ptr<Light>> &lights,
+                          std::shared_ptr<AABBTree> &root,
+                          std::vector<std::shared_ptr<Animator>> &animators)
 {
     G_show_boxes_depth = 0;
     if (!read_level(argc <= 1 ? "../levels/defaultlevel.txt" : argv[1], camera, objects, lights))
@@ -103,12 +135,12 @@ bool read_and_reset_level(int& argc,
     return true;
 }
 
-void move_camera(Camera &camera, std::shared_ptr<AABBTree>& root, uint8_t &movement_flags, double distance)
+void move_camera(Camera &camera, std::shared_ptr<AABBTree> &root, uint8_t &movement_flags, double distance)
 {
     Eigen::Vector3d initial_pos = camera.e;
     Eigen::Vector3d min_corner = camera.box.min_corner;
     Eigen::Vector3d max_corner = camera.box.max_corner;
-    Eigen::Vector3d movement(0,0,0);
+    Eigen::Vector3d movement(0, 0, 0);
 
     if (movement_flags & FORWARD)
         movement += -camera.w * distance;
@@ -119,7 +151,7 @@ void move_camera(Camera &camera, std::shared_ptr<AABBTree>& root, uint8_t &movem
         movement += camera.u * distance;
     else if (movement_flags & LEFT)
         movement += -camera.u * distance;
-    
+
     if (movement_flags & UP)
         movement += camera.v * distance;
     else if (movement_flags & DOWN)
@@ -137,7 +169,7 @@ void move_camera(Camera &camera, std::shared_ptr<AABBTree>& root, uint8_t &movem
     }
 }
 
-void animate_animators(std::vector<std::shared_ptr<Animator>>& animators)
+void animate_animators(std::vector<std::shared_ptr<Animator>> &animators)
 {
     for (int i = 0; i < animators.size(); i++)
     {
@@ -145,26 +177,26 @@ void animate_animators(std::vector<std::shared_ptr<Animator>>& animators)
     }
 }
 
-void change_pitch(Camera& camera, const double& angle)
+void change_pitch(Camera &camera, const double &angle)
 {
     Eigen::Affine3d Y = Eigen::Translation3d(Eigen::Vector3d(0, 0, 0)) *
-        Eigen::AngleAxisd(angle, camera.u);
+                        Eigen::AngleAxisd(angle, camera.u);
     camera.v = (Y * camera.v).normalized();
     camera.w = (Y * camera.w).normalized();
 }
 
-void change_roll(Camera& camera, const double& angle)
+void change_roll(Camera &camera, const double &angle)
 {
     Eigen::Affine3d R = Eigen::Translation3d(Eigen::Vector3d(0, 0, 0)) *
-        Eigen::AngleAxisd(angle, camera.w);
+                        Eigen::AngleAxisd(angle, camera.w);
     camera.u = (R * camera.u).normalized();
     camera.v = (R * camera.v).normalized();
 }
 
-void change_yaw(Camera& camera, const double& angle)
+void change_yaw(Camera &camera, const double &angle)
 {
     Eigen::Affine3d Y = Eigen::Translation3d(Eigen::Vector3d(0, 0, 0)) *
-        Eigen::AngleAxisd(angle, camera.v);
+                        Eigen::AngleAxisd(angle, camera.v);
     camera.u = (Y * camera.u).normalized();
     camera.w = (Y * camera.w).normalized();
 }

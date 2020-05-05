@@ -323,7 +323,7 @@ void push_new_light_block(std::vector<std::shared_ptr<Object>> &objects, std::ve
         side_start_height = 0;
         light->p = Eigen::Vector3d(u, side_start_height + 0.01, w);
     }
-    else
+    else // (c == 'C')
     {
         side_start_height = LEVEL_HEIGHT - light_length;
         light->p = Eigen::Vector3d(u, LEVEL_HEIGHT - 0.01, w);
@@ -333,7 +333,8 @@ void push_new_light_block(std::vector<std::shared_ptr<Object>> &objects, std::ve
     lights.push_back(light);
     objects.push_back(new_light_quad(c, u, w, light->I));
 
-    // Sides of protruding light
+    // Sides of protruding light. Note that these quads have reversed normals compared to Block quads,
+    // so that they will be facing in toward their own light source.
     std::tuple<Eigen::Vector3d, Eigen::Vector3d, Eigen::Vector3d> qt_n =
         std::make_tuple(
             Eigen::Vector3d(u - UNIT_SIZE / 2, side_start_height, w - UNIT_SIZE / 2),
@@ -341,19 +342,19 @@ void push_new_light_block(std::vector<std::shared_ptr<Object>> &objects, std::ve
             Eigen::Vector3d(u - UNIT_SIZE / 2, side_start_height + light_length, w - UNIT_SIZE / 2));
     std::tuple<Eigen::Vector3d, Eigen::Vector3d, Eigen::Vector3d> qt_s =
         std::make_tuple(
-            Eigen::Vector3d(u - UNIT_SIZE / 2, side_start_height, w + UNIT_SIZE / 2),
             Eigen::Vector3d(u + UNIT_SIZE / 2, side_start_height, w + UNIT_SIZE / 2),
-            Eigen::Vector3d(u - UNIT_SIZE / 2, side_start_height + light_length, w + UNIT_SIZE / 2));
+            Eigen::Vector3d(u - UNIT_SIZE / 2, side_start_height, w + UNIT_SIZE / 2),
+            Eigen::Vector3d(u + UNIT_SIZE / 2, side_start_height + light_length, w + UNIT_SIZE / 2));
     std::tuple<Eigen::Vector3d, Eigen::Vector3d, Eigen::Vector3d> qt_e =
         std::make_tuple(
-            Eigen::Vector3d(u + UNIT_SIZE / 2, side_start_height, w + UNIT_SIZE / 2),
             Eigen::Vector3d(u + UNIT_SIZE / 2, side_start_height, w - UNIT_SIZE / 2),
-            Eigen::Vector3d(u + UNIT_SIZE / 2, side_start_height + light_length, w + UNIT_SIZE / 2));
+            Eigen::Vector3d(u + UNIT_SIZE / 2, side_start_height, w + UNIT_SIZE / 2),
+            Eigen::Vector3d(u + UNIT_SIZE / 2, side_start_height + light_length, w - UNIT_SIZE / 2));
     std::tuple<Eigen::Vector3d, Eigen::Vector3d, Eigen::Vector3d> qt_w =
         std::make_tuple(
-            Eigen::Vector3d(u - UNIT_SIZE / 2, side_start_height, w - UNIT_SIZE / 2),
             Eigen::Vector3d(u - UNIT_SIZE / 2, side_start_height, w + UNIT_SIZE / 2),
-            Eigen::Vector3d(u - UNIT_SIZE / 2, side_start_height + light_length, w - UNIT_SIZE / 2));
+            Eigen::Vector3d(u - UNIT_SIZE / 2, side_start_height, w - UNIT_SIZE / 2),
+            Eigen::Vector3d(u - UNIT_SIZE / 2, side_start_height + light_length, w + UNIT_SIZE / 2));
     std::shared_ptr<Quad> quad_n(new Quad(qt_n));
     std::shared_ptr<Quad> quad_s(new Quad(qt_s));
     std::shared_ptr<Quad> quad_e(new Quad(qt_e));
@@ -401,7 +402,6 @@ void push_new_block(std::vector<std::shared_ptr<Object>> &objects, const char &c
         objects.push_back(quad_top);
     }
 
-    // TODO: Check that all quads have the correct orientation/normals. N&S should, but test all and fix all anyway
     std::tuple<Eigen::Vector3d, Eigen::Vector3d, Eigen::Vector3d> qt_n =
         std::make_tuple(
             Eigen::Vector3d(u + UNIT_SIZE / 2, 0, w - UNIT_SIZE / 2),

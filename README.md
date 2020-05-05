@@ -4,36 +4,13 @@
 
 ## Ongoing to-dos for this project (This section to be removed on completion)
 
-- UI: show "Show bounding boxes: ON/OFF", "Bounding box tree depth: _/\<max_depth\>", "Raytrace recursion depth: _", and "View distance: \_". Maybe also show level/file name?
-  - Use this repo to set up CMake with SDL2 TTF: https://github.com/aminosbh/sdl2-cmake-modules
-  - Use this video for reference of SDL2 TTF usage in C++: https://www.youtube.com/watch?v=PHaP3wDggnw
-- Move sdl2.dll and sdl2_ttf.dll into the build folder automatically if it's not already there. Use the existing 32/64 env check at the top of main.cpp to know which dll to use. Helpful sample code:
-
-```
-// Check for and move SDL2.dll if necessary
-std::ifstream  src("../sdl2/lib/x64/SDL2.dll", std::ios::binary);
-std::ofstream  dst("SDL2.dll",   std::ios::binary);
-dst << src.rdbuf();
-// Repeat for sdl2_ttf.dll
-```
-
-- Moving light source (2 options: N/S movement and E/W movement) that can be added in the level editor
+- Moving light source (2 options: N/S movement and E/W movement) that can be added in the level editor.
 - Eliminate all remaining TODOs
 - Clean up directory structure
 - Clean up any code, get rid of unneeded includes, and make final push
 
-#### "Maybe" features or holdovers for RaylTime 2!
-
-- Refraction (with moving "glass" objects to showcase it)
-- Texture mapping on quads
-- Get things on the GPU if possible, increase performance (& default resolution?)
-- In-engine level selector at startup
-- Support triangle soups/STLs
-- Get stuff on the GPU
-
 #### Useful links while working
 
-- [SDL2 text display](https://stackoverflow.com/questions/22886500/how-to-render-text-in-sdl2)
 - [Eigen linear solving](https://eigen.tuxfamily.org/dox/group__TutorialLinearAlgebra.html)
 
 ---
@@ -58,7 +35,8 @@ Use CMake to build and run `rayltime`. Be sure to use a release build by setting
 cmake -DCMAKE_BUILD_TYPE=Release ..
 ```
 
-After building, ensure `SDL2.dll` exists inside your build folder with the executable _or it won't run!_ `SDL2.dll` can be copied from `sdl2/lib/x86` or `sld/lib/x64` as appropriate.
+After building, ensure the required DLL files exist inside your build folder with the executable _or it won't run!_
+They can be found in the folders `Required DLLs x64` and `Required DLLs x86` as necessary. Just copy them into your build folder.
 
 Run `rayltime` and it will start with `defaultlevel.txt` as the default level. Other sample levels have also been provided in `levels/`. Load any level providing the level file path to `rayltime`, e.g. :
 
@@ -76,7 +54,8 @@ rayltime ../levels/my_level.txt
 
 ### Controls
 
-- `Esc`: Quit
+- `Esc` : Quit
+- `U` : Toggle UI text
 - `W` : Move forward
 - `A` : Slide left
 - `S` : Move backward
@@ -152,7 +131,13 @@ Load up `rayltime`. You will see that `defaultlevel.txt` is loaded by default wh
   - Window
   - Keyboard input
   - No graphics API used other than setting pixel colours based on raycast result.
-- **FINDSDL2TTF** (Cmake module)
-  - Used to link SDL2 ttf library, as CMake find_package currently only supports SDL1 by default. On BSD license: see Copyright.txt for details.
+- **FINDSDL2_ttf** (Cmake module)
+  - Used to link SDL2 ttf library for text UI in SDL window.
+    - Required as CMake find_package() currently only supports SDL1.
+    - Found at [this repo](https://github.com/aminosbh/sdl2-cmake-modules).
+    - This CMake module is distributed under the OSI-approved BSD 3-Clause License. See SDL2_ttf_Copyright.txt for details.
 - **OpenMP** (Multithreading)
+
   - Casting rays in parallel
+
+  Thanks to [Grandoplex Produtions](http://grandchaos9000.deviantart.com/) for the "8-bit Operator" ttf font.
