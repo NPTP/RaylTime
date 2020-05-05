@@ -4,17 +4,7 @@
 
 ## Ongoing to-dos for this project (This section to be removed on completion)
 
-- Move sdl2.dll and sdl2_ttf.dll into the build folder automatically if it's not already there. Use the existing 32/64 env check at the top of main.cpp to know which dll to use. Helpful sample code:
-
-```
-// Check for and move SDL2.dll if necessary
-std::ifstream  src("../sdl2/lib/x64/SDL2.dll", std::ios::binary);
-std::ofstream  dst("SDL2.dll",   std::ios::binary);
-dst << src.rdbuf();
-// Repeat for sdl2_ttf.dll, libfreetype-6.dll, and zlib1.dll
-```
-
-- Moving light source (2 options: N/S movement and E/W movement) that can be added in the level editor
+- Moving light source (2 options: N/S movement and E/W movement) that can be added in the level editor.
 - Eliminate all remaining TODOs
 - Clean up directory structure
 - Clean up any code, get rid of unneeded includes, and make final push
@@ -45,10 +35,8 @@ Use CMake to build and run `rayltime`. Be sure to use a release build by setting
 cmake -DCMAKE_BUILD_TYPE=Release ..
 ```
 
-After building, ensure the following DLLs exist inside your build folder with the executable _or it won't run!_
-
-- `SDL2.dll`. This can be copied from `sdl2/lib/x86` or `sld/lib/x64` as appropriate.
-- `SDL2_ttf.dll`, `libfreetype-6.dll`, & `zlib1.dll`. These can be copied from `sdl2_ttf/lib/x86` or `sld2_ttf/lib/x64` as appropriate.
+After building, ensure the required DLL files exist inside your build folder with the executable _or it won't run!_
+They can be found in the folders `Required DLLs x64` and `Required DLLs x86` as necessary. Just copy them into your build folder.
 
 Run `rayltime` and it will start with `defaultlevel.txt` as the default level. Other sample levels have also been provided in `levels/`. Load any level providing the level file path to `rayltime`, e.g. :
 
