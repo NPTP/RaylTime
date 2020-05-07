@@ -23,6 +23,7 @@ inline bool read_level(
 #include "Quad.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
+#include "MovingLight.h"
 #include "Material.h"
 #include <Eigen/Geometry>
 #include <fstream>
@@ -192,6 +193,24 @@ void parse_char(const char &c,
         light->light_direction = Eigen::Vector3d(unif(re), unif(re), unif(re)).normalized();
         light->I = Eigen::Vector3d(0.2 + unif(re) * 0.8, 0.2 + unif(re) * 0.8, 0.2 + unif(re) * 0.8);
         lights.push_back(light);
+        objects.push_back(new_floor_quad(U, W));
+    }
+    else if (c == '^' || c == '>') // MOVING LIGHTS
+    {
+        if (c == '^') // North/south orientation
+        {
+            std::shared_ptr<MovingLight> light(new MovingLight(Eigen::Vector3d(0, 0, -1), POINT_LIGHT_RADIUS / 2.0, UNIT_SIZE));
+            light->p = Eigen::Vector3d(U, V, W);
+            light->I = Eigen::Vector3d(1, 1, 1);
+            lights.push_back(light);
+        }
+        else if (c == '>') // East/west orientation
+        {
+            std::shared_ptr<MovingLight> light(new MovingLight(Eigen::Vector3d(1, 0, 0), POINT_LIGHT_RADIUS / 2.0, UNIT_SIZE));
+            light->p = Eigen::Vector3d(U, V, W);
+            light->I = Eigen::Vector3d(1, 1, 1);
+            lights.push_back(light);
+        }
         objects.push_back(new_floor_quad(U, W));
     }
     else if (c == 'F' || c == 'C') // FLOOR/CEILING LIGHT

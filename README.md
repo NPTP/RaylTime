@@ -4,14 +4,9 @@
 
 ## Ongoing to-dos for this project (This section to be removed on completion)
 
-- Moving light source (2 options: N/S movement and E/W movement) that can be added in the level editor.
 - Eliminate all remaining TODOs
 - Clean up directory structure
 - Clean up any code, get rid of unneeded includes, and make final push
-
-#### Useful links while working
-
-- [Eigen linear solving](https://eigen.tuxfamily.org/dox/group__TutorialLinearAlgebra.html)
 
 ---
 
@@ -114,6 +109,7 @@ This is the tile legend for making your own levels. Note that objects and lights
 > - `O` = Large floating sphere
 > - `D` = Directional light (random direction). Position is irrelevant, affects whole scene
 > - `L` = Invisible floating point light
+> - `^` or `>` = Moving invisible floating point light. The first one will create a light that moves North/South. The second will be East/West. The light will move 2 tiles away from its initial point before doubling back and covering the same distance from the start in the other direction.
 > - `C` = Ceiling light "fixture"
 > - `F` = Floor light "fixture"
 > - `N`, `S`, `E`, or `W` = Camera, with respective compass starting direction

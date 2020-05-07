@@ -13,6 +13,8 @@ public:
         this->light_radius = l_radius;
     }
 
+    PointLight() = default;
+
     /*
     Given a query point return direction toward Light.
     

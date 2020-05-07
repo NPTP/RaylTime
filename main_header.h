@@ -90,10 +90,13 @@ void set_logical_resolution(int *&rgb_image, SDL_Renderer *&renderer, int &w, in
 }
 
 void collect_animators(std::vector<std::shared_ptr<Object>> &objects,
+                       std::vector<std::shared_ptr<Light>> &lights,
                        std::vector<std::shared_ptr<Animator>> &animators)
 {
     animators.clear();
     animators.shrink_to_fit();
+
+    // Find animators in Objects
     std::shared_ptr<Animator> object_is_animator;
     for (int i = 0; i < objects.size(); i++)
     {
@@ -101,6 +104,15 @@ void collect_animators(std::vector<std::shared_ptr<Object>> &objects,
         object_is_animator = std::dynamic_pointer_cast<Animator>(objects[i]);
         if (object_is_animator)
             animators.push_back(object_is_animator);
+    }
+
+    // Find animators in Lights
+    std::shared_ptr<Animator> light_is_animator;
+    for (int i = 0; i < lights.size(); i++)
+    {
+        light_is_animator = std::dynamic_pointer_cast<Animator>(lights[i]);
+        if (light_is_animator)
+            animators.push_back(light_is_animator);
     }
 }
 
@@ -131,7 +143,7 @@ bool read_and_reset_level(int &argc,
                                                 camera.e[2] + VIEWER_HITBOX_SIZE / 2));
 
     // Collect the animators into a separate structure
-    collect_animators(objects, animators);
+    collect_animators(objects, lights, animators);
     return true;
 }
 
