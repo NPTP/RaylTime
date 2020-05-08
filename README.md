@@ -2,17 +2,7 @@
 
 ##### Simple real-time interactive ray tracer with text-based level editing
 
-## Ongoing to-dos for this project (This section to be removed on completion)
-
-- Eliminate all remaining TODOs
-- Clean up directory structure
-- Clean up any code, get rid of unneeded includes, and make final push
-
----
-
----
-
-RAYLTIME is a simple interactive ray tracer running on the CPU and built on top of the Eigen linear algebra library. It allows you to move around raytraced scenes in real-time. It runs in a much lower resolution than other simple (usually offline) raytracers for useable performance, along with other optimizations. It features a text-based "level editing" system allowing you to quickly make new scenes to move around in.
+RaylTime is a simple interactive ray tracer running on the CPU and built on top of the Eigen linear algebra library. It allows you to move around raytraced scenes in real-time. It runs in a much lower resolution than other simple (usually offline) raytracers for useable performance, along with other optimizations. It features a text-based "level editing" system allowing you to quickly make new scenes to move around in.
 
 RAYLTIME uses the following to improve performance:
 
@@ -33,7 +23,7 @@ cmake -DCMAKE_BUILD_TYPE=Release ..
 After building, ensure the required DLL files exist inside your build folder with the executable _or it won't run!_
 They can be found in the folders `Required DLLs x64` or `Required DLLs x86`, whichever is necessary for your system. Just copy them into your build folder.
 
-Run `rayltime` and it will start with `defaultlevel.txt` as the default level. Other sample levels have also been provided in `levels/`. Load any level providing the level file path to `rayltime`, e.g. :
+Run `rayltime` from a build folder inside the repo and it will start with `defaultlevel.txt` as the default level. Other sample levels have also been provided in `levels/`. Load any level from any build location, providing the level file path to `rayltime`, e.g. :
 
 ```
 rayltime ../levels/my_level.txt
@@ -62,10 +52,10 @@ rayltime ../levels/my_level.txt
   - `M` : Show deeper depth of bounding box tree
 - `[` : Decrease raytracing reflection recursive depth (default 2, min 0)
 - `]` : Increase raytracing reflection recursive depth (max 10)
-- `-` : Decrease draw distance (default 50, min 10)
-- `=` : Increase draw distance (default 50, max 100)
-- `1`-`5` : Change raycasting resolution from 1 (low) to 5 (high). See `set_logical_resolution()` in `main_header.h` for resolution details.
-- `R` : Reload level (will load any changes made to level file; allows for "nearly live" editing)
+- `-` : Decrease draw distance (min 10)
+- `=` : Increase draw distance (max 200)
+- `1`-`5` : Change raycasting resolution from 1 (low) to 5 (high). See `set_logical_resolution()` in `main_header.h` for specific resolution sizes, easily changed.
+- `R` : Reload level (will also load any changes made to level file; allows for "nearly live" editing)
 
 Additional controls for **maximum exploration**:
 
@@ -94,7 +84,7 @@ B..o..B
 BBBBBBB
 ```
 
-This is a 5x7 level with a North-facing camera in the centre, a point light just ahead of it, a floating sphere just behind it, and blocks all around the border except for empty holes in the walls to the left and right of the camera.
+This is a 5x7 level with a North-facing camera in the centre, a point light just ahead of it, a floating sphere just behind it, floor tiles inside the border and blocks all around the border except for empty holes in the walls to the left and right of the camera.
 
 This is the tile legend for making your own levels. Note that objects and lights get random colours on each level reset.
 
@@ -109,7 +99,7 @@ This is the tile legend for making your own levels. Note that objects and lights
 > - `O` = Large floating sphere
 > - `D` = Directional light (random direction). Position is irrelevant, affects whole scene
 > - `L` = Invisible floating point light
-> - `^` or `>` = Moving invisible floating point light. The first one will create a light that moves North/South. The second will be East/West. The light will move 2 tiles away from its initial point before doubling back and covering the same distance from the start in the other direction.
+> - `^` or `>` = Moving invisible floating point light. `^` will create a light that moves North/South. `>` will be East/West. The light will move 2 tiles away from its initial point before doubling back and covering the same distance from the start in the other direction, passing through any walls that have been placed in this range.
 > - `C` = Ceiling light "fixture"
 > - `F` = Floor light "fixture"
 > - `N`, `S`, `E`, or `W` = Camera, with respective compass starting direction

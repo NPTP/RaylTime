@@ -20,7 +20,6 @@ struct BoundingBox
     {
     }
 
-    // TODO: (Leave until end) Do we use this function at all? Can we get rid of it?
     Eigen::RowVector3d center() const
     {
         return 0.5 * (max_corner + min_corner);

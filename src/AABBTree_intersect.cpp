@@ -31,11 +31,6 @@ bool AABBTree::intersect(
     Eigen::Vector3d right_n;
     std::shared_ptr<Object> left_descendant, right_descendant;
 
-    // TODO: (Leave until end) delete commented lines if new version works.
-    // Use these casts to test if children are AABBTrees, or if they are primitives.
-    // std::shared_ptr<AABBTree> left_is_aabb = std::dynamic_pointer_cast<AABBTree>(this->left);
-    // std::shared_ptr<AABBTree> right_is_aabb = std::dynamic_pointer_cast<AABBTree>(this->right);
-
     // Run through all checks of intersection.
     if (this->left)
         left_hit = this->left->intersect(is_from_viewer, ray, min_t, left_t, left_n, left_descendant);
